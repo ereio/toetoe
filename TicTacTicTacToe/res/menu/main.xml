@@ -4,8 +4,24 @@
 
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="@string/action_logout"/>
+    <item
+        android:id="@+id/action_chat"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="@string/Chat"/>
+    <item
+        android:id="@+id/action_userlist"
+        android:orderInCategory="2"
+        android:visible="false"
+        android:showAsAction="never"
+        android:title="@string/Userlist"/>
 
 </menu>
