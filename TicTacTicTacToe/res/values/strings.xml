@@ -11,6 +11,7 @@
     <string name="ChangePass">Forgot Password</string>
     <string name="Chat">Chat</string>
  	<string name="Userlist">Userlist</string>
+ 	<string name="space_desc">space</string>
 
 
 </resources>
