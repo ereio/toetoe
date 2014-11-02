@@ -1,6 +1,8 @@
 bin/
 bin/*
 gen/
-./gen/
+/gen/
+/bin/
 ./bin/
-gen/*
+./gen/
+

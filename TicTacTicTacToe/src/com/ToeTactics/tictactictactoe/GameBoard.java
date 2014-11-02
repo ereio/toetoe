@@ -46,8 +46,6 @@ public class GameBoard extends Activity{
 	}
 	
 	
-	
-	
 	// User Interface Initialization
 	//--------------------------------------------------
 	@Override
