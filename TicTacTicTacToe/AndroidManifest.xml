@@ -26,6 +26,10 @@
             android:name=".GameBoard"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.ToeTactics.tictactictactoe.Settings"
+            android:label="@string/action_settings">   
+        </activity>
     </application>
 
 </manifest>

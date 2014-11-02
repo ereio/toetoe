@@ -24,8 +24,11 @@ public class GameBoardFragment extends Fragment {
 	String username;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
-		
-		return inflater.inflate(R.layout.game_board, container);
+		if(state != null){
+			Bundle bundle = getArguments();
+			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
+		}
+		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
 	public void init(String user_name, String board_JSON){
