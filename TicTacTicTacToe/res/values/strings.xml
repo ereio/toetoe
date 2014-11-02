@@ -12,6 +12,17 @@
     <string name="Chat">Chat</string>
  	<string name="Userlist">Userlist</string>
  	<string name="space_desc">space</string>
-
-
+	<string name="Open">Open</string>
+	<string name="Closed">Closed</string>
+	<string name="PlayersPrompt">Online Players</string>
+	<string name="ChatPrompt"> Chat</string>
+	<string name="TieAISettingInfo">
+	    Allow main-game Ties to count as wins for the board </string>
+	<string name="TimeSettingInfo">
+		Enable Time constrants of 30 seconds for each move on the next new game </string>
+	<string name="ForceMoveSettingInfo">
+	    Force Players to move on a subgame corresponding to your move </string>
+	<string name="SecretSettingInfo">
+	    Secret Setting - WARNING:Pretty Difficult
+	</string>
 </resources>
