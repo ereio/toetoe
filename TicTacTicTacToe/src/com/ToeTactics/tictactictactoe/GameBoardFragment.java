@@ -1,5 +1,8 @@
 package com.ToeTactics.tictactictactoe;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 
 import android.app.Fragment;
@@ -17,13 +20,71 @@ public class GameBoardFragment extends Fragment {
 	ImageView[][] sub_winners = new ImageView[3][3];
 	
 	Board board = new Board();
+	char x_or_o;
+	String username;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		
 		return inflater.inflate(R.layout.game_board, container);
 	}
 	
-	public void makeMove(int i, int j, int k, int l){
+	public void init(String user_name, String board_JSON){
+		username = user_name;
+		
+		if(!board_JSON.equals("")){
+			try {
+				JSONObject game_obj = new JSONObject(board_JSON);
+				if(game_obj.getJSONObject("current-player").getString("username").equals(username)){
+					x_or_o = game_obj.getJSONObject("current-player").getString("value").charAt(0);
+				}
+				else{
+					x_or_o = game_obj.getJSONObject("next-player").getString("value").charAt(0);
+				}
+				
+				initBoard(board_JSON);
+				
+			} catch (JSONException e) {
+				Log.e("GameBoardFragment",e.toString());
+			}
+		}
+	}
+	
+	public void initBoard(String JSON_board){
+		if(!JSON_board.equals("")){
+			try {
+				JSONObject game_obj = new JSONObject(JSON_board);
+				
+				for(int i = 0; i < 3; i++){
+					for(int j = 0; j < 3; j++){
+						for(int k = 0; k < 3; k++){
+							for(int l = 0; l < 3; l++){
+								if(game_obj.getJSONArray("board")
+										.getJSONArray(i)
+										.getJSONArray(j)
+										.getJSONArray(k)
+										.getString(l)
+										.charAt(0) != '_')
+								{
+									board.current_player =
+										game_obj.getJSONArray("board")
+												.getJSONArray(i)
+												.getJSONArray(j)
+												.getJSONArray(k)
+												.getString(l)
+												.charAt(0);
+									move(i,j,k,l);
+								}
+							}
+						}
+					}
+				}
+			} catch (JSONException e) {
+				Log.e("GameBoardFragment",e.toString());
+			}
+		}
+	}
+	
+	private void move(int i, int j, int k, int l){
 		if(board.makeMove(i, j, k, l)){
 			//mark last player since that's who made the move
 			if(board.current_player == 'O'){
@@ -58,6 +119,12 @@ public class GameBoardFragment extends Fragment {
 				// TODO alert dialog
 			}
 		}
+	}
+	
+	public void makeMove(int i, int j, int k, int l){
+		//if(board.current_player == x_or_o){
+			move(i ,j ,k ,l);
+		//}
 	}
 	
 	@Override
