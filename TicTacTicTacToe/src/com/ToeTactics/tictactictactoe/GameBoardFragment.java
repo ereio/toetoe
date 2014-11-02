@@ -1,5 +1,7 @@
 package com.ToeTactics.tictactictactoe;
 
+import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,9 @@ import android.widget.ImageView;
 public class GameBoardFragment extends Fragment {
 
 	ImageView[][][][] spaces = new ImageView[3][3][3][3];
+	ImageView[][] sub_winners = new ImageView[3][3];
+	
+	Board board = new Board();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		
@@ -19,15 +24,40 @@ public class GameBoardFragment extends Fragment {
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
-		//if(board.makeMove(i, j, k, l)){
-		//mark last player since that's who made the move
-		//if(board.current_player = 'O'){
-			spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
-		//}
-		//if(board.current_player = 'X'){
-			//spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
-		//}
-	//}
+		if(board.makeMove(i, j, k, l)){
+			//mark last player since that's who made the move
+			if(board.current_player == 'O'){
+				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
+			}
+			if(board.current_player == 'X'){
+				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
+			}
+			
+			//check for subgame winner
+			if(board.outer_board[i][j].getWinner() == 'X'){
+				for(int c1 = 0; c1 < 3; c1++){
+					for(int c2 = 0; c2 < 3; c2++){
+						spaces[i][j][c1][c2].setVisibility(View.GONE);
+					}
+				}
+				sub_winners[i][j].setImageResource(R.drawable.x_tile_w_bg);
+				sub_winners[i][j].setVisibility(View.VISIBLE);
+			}
+			if(board.outer_board[i][j].getWinner() == 'O'){
+				for(int c1 = 0; c1 < 3; c1++){
+					for(int c2 = 0; c2 < 3; c2++){
+						spaces[i][j][c1][c2].setVisibility(View.GONE);
+					}
+				}
+				sub_winners[i][j].setImageResource(R.drawable.o_tile_w_bg);
+				sub_winners[i][j].setVisibility(View.VISIBLE);
+			}
+			
+			//check for winner
+			if(board.getWinner() != ' '){
+				// TODO alert dialog
+			}
+		}
 	}
 	
 	@Override
@@ -54,7 +84,16 @@ public class GameBoardFragment extends Fragment {
 		//2 1  07|17|27  37|47|57  67|77|87
 		//     --------  --------  --------
 		//  2  08|18|28  38|48|58  68|78|88
-		//
+		
+		sub_winners[0][0] = (ImageView) getActivity().findViewById(R.id.winner00);
+		sub_winners[0][1] = (ImageView) getActivity().findViewById(R.id.winner01);
+		sub_winners[0][2] = (ImageView) getActivity().findViewById(R.id.winner02);
+		sub_winners[1][0] = (ImageView) getActivity().findViewById(R.id.winner10);
+		sub_winners[1][1] = (ImageView) getActivity().findViewById(R.id.winner11);
+		sub_winners[1][2] = (ImageView) getActivity().findViewById(R.id.winner12);
+		sub_winners[2][0] = (ImageView) getActivity().findViewById(R.id.winner20);
+		sub_winners[2][1] = (ImageView) getActivity().findViewById(R.id.winner21);
+		sub_winners[2][2] = (ImageView) getActivity().findViewById(R.id.winner22);
 		
 		spaces[0][0][0][0] = (ImageView) getActivity().findViewById(R.id.space00);
 		spaces[0][0][0][1] = (ImageView) getActivity().findViewById(R.id.space01);
