@@ -2,8 +2,11 @@ package com.ToeTactics.tictactictactoe;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ToggleButton;
 
 public class Settings extends Activity{
+	ToggleButton button;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

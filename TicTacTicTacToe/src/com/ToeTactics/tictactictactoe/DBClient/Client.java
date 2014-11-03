@@ -12,13 +12,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.json.JSONArray;
+
 import android.app.Activity;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Client implements Runnable{
-	
+	private static final String TAG = "CLIENT";
 	SocketChannel socketChannel = null;
 	
 	Selector selector = null;
@@ -31,6 +33,7 @@ public class Client implements Runnable{
     
     LinearLayout layout;
     Activity activity;
+    int openPort = 40052;
     
     byte [] temp = new byte[1000];
 
@@ -40,11 +43,16 @@ public class Client implements Runnable{
 		
 		layout = l;
 		activity = a;
+	}
+
+	
+	public void run() {
 		
 		try{
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
-	        socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", 40051));
+	        socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
+	        //socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
 	        
 	        //SelectorProvider provider = SelectorProvider.provider();
 	        selector = SelectorProvider.provider().openSelector();
@@ -52,13 +60,9 @@ public class Client implements Runnable{
 	        socketChannel.register(selector, SelectionKey.OP_CONNECT);
 	        
     	}catch(IOException e){
+    		Log.i(TAG, "Client Failed To Establish with Host");
     		e.printStackTrace();
     	}
-		
-	}
-
-	
-	public void run() {
 		
         while( true ){
         	
@@ -112,7 +116,6 @@ public class Client implements Runnable{
 										TextView t = new TextView(activity);
 										
 										byte[]array = buffer.array();
-										
 										String message = new String(array);
 										
 										message.trim();
@@ -142,29 +145,37 @@ public class Client implements Runnable{
         }//End of Main Run Loop
 	}//End of Run Method
 	
-	public void write(String message){
+	public void write(String message, String userName)
+	{	final String m = userName + " : " + message ;
 		
-		buffer.clear();
-		
-		buffer = ByteBuffer.wrap(message.getBytes());
-		
-		if(buffer != null){
-			buffer.order(ByteOrder.BIG_ENDIAN);
-			//System.out.println( "MESSAGE: " + new String(buffer.array()));
-			try {
-				int bytesWritten = socketChannel.write(buffer);
+		Thread thread = new Thread()
+		{
+			@Override
+			public void run(){
 				
-				if(bytesWritten != -1){
-					socketChannel.register(selector, SelectionKey.OP_READ);
+				buffer.clear();
+		
+				buffer = ByteBuffer.wrap(m.getBytes());
+		
+				if(buffer != null){
+					buffer.order(ByteOrder.BIG_ENDIAN);
+					//System.out.println( "MESSAGE: " + new String(buffer.array()));
+					try {
+						int bytesWritten = socketChannel.write(buffer);
+				
+						if(bytesWritten != -1){
+							socketChannel.register(selector, SelectionKey.OP_READ);
+						}
+				
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					System.out.println("MESSAGE IS NULL!");
 				}
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-		}else{
-			System.out.println("MESSAGE IS NULL!");
-		}
+		};
+		thread.start();
 	}
-	
 }
