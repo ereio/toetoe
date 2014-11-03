@@ -1,5 +1,6 @@
 package com.ToeTactics.tictactictactoe;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,32 @@ public class GameBoardFragment extends Fragment {
 			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
 		}
 		return inflater.inflate(R.layout.game_board, container, false);
+	}
+	
+	public JSONArray getBoardAsJSON(){
+		JSONArray JSONboard = new JSONArray();
+		
+		try{
+			for(int i = 0; i < 3; i++){
+				JSONArray outer_row = new JSONArray();
+				for(int j = 0; j < 3; j++){
+					JSONArray inner_col = new JSONArray();
+					for(int k = 0; k < 3; k++){
+						JSONArray inner_row = new JSONArray();
+						for(int l = 0; l < 3; l++){
+							inner_row.put(l, "" + board.outer_board[i][j].getSpace(k, l));
+						}
+						inner_col.put(k, inner_row);
+					}
+					outer_row.put(j, inner_col);
+				}
+				JSONboard.put(i, outer_row);
+			}
+		} catch(Exception e){
+			Log.e("GameBoardFragment", e.toString());
+		}
+		
+		return JSONboard;
 	}
 	
 	public void init(String user_name, String board_JSON){
