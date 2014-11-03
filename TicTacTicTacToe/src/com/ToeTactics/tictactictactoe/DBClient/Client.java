@@ -29,8 +29,7 @@ public class Client implements Runnable{
 	
 	String message;
     
-    ByteBuffer buffer = ByteBuffer.allocate(124);
-    
+    ByteBuffer buffer = ByteBuffer.allocate(1024);
     LinearLayout layout;
     Activity activity;
     int openPort = 40052;
@@ -145,7 +144,7 @@ public class Client implements Runnable{
         }//End of Main Run Loop
 	}//End of Run Method
 	
-	public void write(String message, String userName)
+	public void writeMessage(String message, String userName)
 	{	final String m = userName + " : " + message ;
 		
 		Thread thread = new Thread()
@@ -159,7 +158,7 @@ public class Client implements Runnable{
 		
 				if(buffer != null){
 					buffer.order(ByteOrder.BIG_ENDIAN);
-					//System.out.println( "MESSAGE: " + new String(buffer.array()));
+					System.out.println( "BYTES: " + new String(buffer.array()));
 					try {
 						int bytesWritten = socketChannel.write(buffer);
 				
@@ -177,5 +176,50 @@ public class Client implements Runnable{
 			}
 		};
 		thread.start();
+	}
+	
+	public void writeJSONBoard(String board){
+		final String JSONBoard = board;
+		Thread thread = new Thread()
+		{
+			@Override
+			public void run(){
+				
+				buffer.clear();
+		
+				buffer = ByteBuffer.wrap(JSONBoard.getBytes());
+		
+				if(buffer != null){
+					buffer.order(ByteOrder.BIG_ENDIAN);
+					
+					System.out.println( "BYTES: " + new String(buffer.array()));
+					try {
+						int bytesWritten = socketChannel.write(buffer);
+				
+						if(bytesWritten != -1){
+							socketChannel.register(selector, SelectionKey.OP_READ);
+						}
+				
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					System.out.println("MESSAGE IS NULL!");
+				}
+			}
+		};
+		thread.start();
+	}
+	
+	private void readJSONBoard(){
+		
+		
+	}
+	
+	private void readConnectUsers(){
+		
+		
+		
 	}
 }
