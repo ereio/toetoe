@@ -1,5 +1,6 @@
 package com.ToeTactics.tictactictactoe;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,19 +17,46 @@ import android.widget.ImageView;
 
 public class GameBoardFragment extends Fragment {
 
-	ImageView[][][][] spaces = new ImageView[3][3][3][3];
-	ImageView[][] sub_winners = new ImageView[3][3];
+	public ImageView[][][][] spaces = new ImageView[3][3][3][3];
+	public ImageView[][] sub_winners = new ImageView[3][3];
 	
-	Board board = new Board();
-	char x_or_o;
-	String username;
+	public Board board = new Board();
+	public char x_or_o;
+	public String username;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		if(state != null){
-			Bundle bundle = getArguments();
-			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
+			//Bundle bundle = getArguments();
+			//String currentMoves = bundle.getString(GameBoard.BOARDKEY);
+			//initBoard(currentMoves);
 		}
 		return inflater.inflate(R.layout.game_board, container, false);
+	}
+	
+	public JSONArray getBoardAsJSON(){
+		JSONArray JSONboard = new JSONArray();
+		
+		try{
+			for(int i = 0; i < 3; i++){
+				JSONArray outer_row = new JSONArray();
+				for(int j = 0; j < 3; j++){
+					JSONArray inner_col = new JSONArray();
+					for(int k = 0; k < 3; k++){
+						JSONArray inner_row = new JSONArray();
+						for(int l = 0; l < 3; l++){
+							inner_row.put(l, "" + board.outer_board[i][j].getSpace(k, l));
+						}
+						inner_col.put(k, inner_row);
+					}
+					outer_row.put(j, inner_col);
+				}
+				JSONboard.put(i, outer_row);
+			}
+		} catch(Exception e){
+			Log.e("GameBoardFragment", e.toString());
+		}
+		
+		return JSONboard;
 	}
 	
 	public void init(String user_name, String board_JSON){
@@ -66,7 +94,7 @@ public class GameBoardFragment extends Fragment {
 										.getJSONArray(j)
 										.getJSONArray(k)
 										.getString(l)
-										.charAt(0) != '_')
+										.charAt(0) != Board.BLANK_TILE)
 								{
 									board.current_player =
 										game_obj.getJSONArray("board")
@@ -90,15 +118,15 @@ public class GameBoardFragment extends Fragment {
 	private void move(int i, int j, int k, int l){
 		if(board.makeMove(i, j, k, l)){
 			//mark last player since that's who made the move
-			if(board.current_player == 'O'){
+			if(board.current_player == Board.O_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
 			}
-			if(board.current_player == 'X'){
+			if(board.current_player == Board.X_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
 			}
 			
 			//check for subgame winner
-			if(board.outer_board[i][j].getWinner() == 'X'){
+			if(board.outer_board[i][j].getWinner() == Board.X_TILE){
 				for(int c1 = 0; c1 < 3; c1++){
 					for(int c2 = 0; c2 < 3; c2++){
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
@@ -107,7 +135,7 @@ public class GameBoardFragment extends Fragment {
 				sub_winners[i][j].setImageResource(R.drawable.x_tile_w_bg);
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
-			if(board.outer_board[i][j].getWinner() == 'O'){
+			if(board.outer_board[i][j].getWinner() == Board.O_TILE){
 				for(int c1 = 0; c1 < 3; c1++){
 					for(int c2 = 0; c2 < 3; c2++){
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
@@ -118,7 +146,7 @@ public class GameBoardFragment extends Fragment {
 			}
 			
 			//check for winner
-			if(board.getWinner() != ' '){
+			if(board.getWinner() != Board.BLANK_TILE){
 				// TODO alert dialog
 			}
 		}
@@ -140,7 +168,7 @@ public class GameBoardFragment extends Fragment {
 		//  0  00|10|20  30|40|50  60|70|80
 		//     --------  --------  --------
 		//0 1  01|11|21  31|41|51  61|71|81
-		//     acToeToe /--------  --------  --------
+		//     --------  --------  --------
 		//  2  02|12|22  32|42|52  62|72|82
 		//
 		//  0  03|13|23  33|43|53  63|73|83
