@@ -48,7 +48,7 @@ public class ChatFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				String m = message.getText().toString();
-				client.write(m,userName);
+				client.writeMessage(m,userName);
 				
 			}
 		});
