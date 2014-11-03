@@ -1,6 +1,7 @@
 package com.ToeTactics.tictactictactoe;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,29 +22,33 @@ public class ChatFragment extends Fragment{
 	EditText message;
 	
 	Client client = null;
+	Context fContext = null;
+	String userName = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							Bundle savedInstanceState ){
-		
-		/*client = new Client(layout, getView());
-		Thread t = new Thread(client);
-		t.start();*/
-		
 		return inflater.inflate(R.layout.chat_pane, container, false);
 	}
 	
-	public ChatFragment(){
+	@Override
+	public void onStart(){
+		init();
+		client = new Client(layout, getActivity());
+		Thread t = new Thread(client);
+		t.start();
+		super.onStart();
 	}
 	
 	public void init(){
+		userName = "Testing";
 		send = (Button) getView().findViewById(R.id.send);
 		send.setOnClickListener(new OnClickListener() {
-			
+		
 			@Override
 			public void onClick(View v) {
 				String m = message.getText().toString();
-				client.write(m);
+				client.write(m,userName);
 				
 			}
 		});
