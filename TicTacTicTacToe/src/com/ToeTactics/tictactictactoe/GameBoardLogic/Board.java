@@ -1,9 +1,14 @@
 package com.ToeTactics.tictactictactoe.GameBoardLogic;
 
 public class Board{
+	public static final char X_TILE = 'X';
+	public static final char O_TILE = 'O';
+	public static final char BLANK_TILE = '_';
+	public static final char TIE_TILE = 'T';
+	
 	public InnerBoard[][] outer_board = new InnerBoard[3][3];
-	public char current_player = 'X';
-	private char winner = ' ';
+	public char current_player = X_TILE;
+	private char winner = BLANK_TILE;
 
 	////////////////////////////////////////////////
 	// constructor
@@ -24,17 +29,17 @@ public class Board{
 	public boolean makeMove(int bx, int by, int x, int y){
 		if(outer_board[bx][by].setSpace(x,y,current_player)){
 			switchPlayers();
-			if(checkWinner('X')){
-				winner = 'X';
+			if(checkWinner(X_TILE)){
+				winner = X_TILE;
 			}
-			else if (checkWinner('O')){
-				winner = 'O';
+			else if (checkWinner(O_TILE)){
+				winner = O_TILE;
 			}
 			else if(checkIfBoardFull()){
-				winner = 'T';
+				winner = TIE_TILE;
 			}
 			else{
-				winner = ' ';
+				winner = BLANK_TILE;
 			}
 
 			return true;
@@ -47,10 +52,10 @@ public class Board{
 	// switches players
 	///////////////////////////////////////////////////////////////
 	public void switchPlayers(){
-		if(current_player == 'X')
-			current_player = 'O';
+		if(current_player == X_TILE)
+			current_player = O_TILE;
 		else
-			current_player = 'X';
+			current_player = X_TILE;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -98,7 +103,7 @@ public class Board{
 	public boolean checkIfBoardFull(){
 		for(int i = 0; i < 3; i++){
 			for(int j = 0; j < 3; j++){
-				if(outer_board[i][j].getWinner() == ' ')
+				if(outer_board[i][j].getWinner() == BLANK_TILE)
 					return false;
 			}
 		}
@@ -108,9 +113,9 @@ public class Board{
 	
 	///////////////////////////////////////////////////
 	// returns winner
-	// 'X' if player 'X'
-	// 'O' if player 'O'
-	// ' ' if no winner
+	// X_TILE if player X
+	// O_TILE if player O
+	// BLANK_TILE if no winner
 	// 'T' if tie
 	//////////////////////////////////////////////////
 	public char getWinner(){
