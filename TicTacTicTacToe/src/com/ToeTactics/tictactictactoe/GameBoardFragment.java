@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
+import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -22,11 +23,13 @@ public class GameBoardFragment extends Fragment {
 	Board board = new Board();
 	char x_or_o;
 	String username;
+	ToeClient client = null;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		if(state != null){
 			Bundle bundle = getArguments();
 			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
+			initBoard(currentMoves);
 		}
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
@@ -662,5 +665,9 @@ public class GameBoardFragment extends Fragment {
 				makeMove(2,2,2,2);
 			}
 		});
+	}
+	
+	public void setClient(ToeClient c){
+		client = c;
 	}
 }

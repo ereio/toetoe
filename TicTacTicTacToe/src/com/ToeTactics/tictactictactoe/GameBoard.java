@@ -1,5 +1,7 @@
 package com.ToeTactics.tictactictactoe;
 
+import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -29,6 +31,7 @@ public class GameBoard extends Activity{
 	private ListView playerList;
 	private FrameLayout mChat;
 	private FrameLayout mBoard;
+	private ToeClient client;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String[] players = {"Joe", "Sally", "Bob"};
 	private String curPlayer = "DudeGuy";
@@ -37,8 +40,18 @@ public class GameBoard extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
+		// Starts client
+		client = new ToeClient(this);
+		Thread t = new Thread(client);
+		t.start();
+		
+		// Init UI Components and Links with client
 		ui_init();
 		
+		// Pass Clients
+		pass_client();
+
+
 		if(savedInstanceState == null){
 		//	SwitchPlayerBoard(NOGAME);
 		}
@@ -166,6 +179,18 @@ public class GameBoard extends Activity{
 		fTrans.add(R.id.game_display, fBoard);
 		fTrans.add(R.id.right_chat, fChat);
 		fTrans.commit();
+	}
+	
+	private void pass_client(){
+		Fragment chatFrag = getFragmentManager().findFragmentById(R.id.right_chat);
+		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.right_chat);
+		if(chatFrag instanceof ChatFragment){
+			((ChatFragment) chatFrag).setClient(client); 
+		}
+		if(boardFrag instanceof GameBoardFragment){
+			((GameBoardFragment) boardFrag).setClient(client);
+		}
+		
 	}
 	
 	// Used to sync the Drawer state 
