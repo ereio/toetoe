@@ -41,15 +41,15 @@ public class GameBoard extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
 		// Starts client
-		client = new ToeClient(this);
-		Thread t = new Thread(client);
-		t.start();
+		//client = new ToeClient(this);
+		//Thread t = new Thread(client);
+		//t.start();
 		
 		// Init UI Components and Links with client
 		ui_init();
 		
 		// Pass Clients
-		pass_client();
+//		pass_client();
 
 
 		if(savedInstanceState == null){
@@ -181,17 +181,17 @@ public class GameBoard extends Activity{
 		fTrans.commit();
 	}
 	
-	private void pass_client(){
-		Fragment chatFrag = getFragmentManager().findFragmentById(R.id.right_chat);
-		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.right_chat);
-		if(chatFrag instanceof ChatFragment){
-			((ChatFragment) chatFrag).setClient(client); 
-		}
-		if(boardFrag instanceof GameBoardFragment){
-			((GameBoardFragment) boardFrag).setClient(client);
-		}
+//	private void pass_client(){
+//		Fragment chatFrag = getFragmentManager().findFragmentById(R.id.right_chat);
+//		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.right_chat);
+//		if(chatFrag instanceof ChatFragment){
+		//	((ChatFragment) chatFrag).setClient(client); 
+//		}
+//		if(boardFrag instanceof GameBoardFragment){
+//			((GameBoardFragment) boardFrag).setClient(client);
+//		}
 		
-	}
+//	}
 	
 	// Used to sync the Drawer state 
 	@Override

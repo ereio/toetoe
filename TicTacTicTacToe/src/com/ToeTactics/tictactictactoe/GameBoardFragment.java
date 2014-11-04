@@ -31,8 +31,14 @@ public class GameBoardFragment extends Fragment {
 			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
 			initBoard(currentMoves);
 		}
+		//client = new ToeClient(getActivity());
+		//Thread t = new Thread(client);
+		//t.start();
+		
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
+	
+
 	
 	public void init(String user_name, String board_JSON){
 		username = user_name;
@@ -136,6 +142,9 @@ public class GameBoardFragment extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
+		client = new ToeClient(getActivity());
+		Thread t = new Thread(client);
+		t.start();
 		//Board Coordinates Reference
 		//        0         1         2
 		//     0  1  2   0  1  2   0  1  2

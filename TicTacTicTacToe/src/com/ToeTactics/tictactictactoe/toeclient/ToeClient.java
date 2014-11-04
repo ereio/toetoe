@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.ConnectionPendingException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -38,6 +39,11 @@ public class ToeClient implements Runnable {
 	Map list = new HashMap<SelectionKey, byte[]>();
 
 	
+	public ToeClient(LinearLayout l, Activity a){
+		activity = a;
+		layout = l;
+	}
+	
 	public ToeClient(Activity a){
 		activity = a;
 	}
@@ -47,13 +53,22 @@ public class ToeClient implements Runnable {
 		init_Connection();
 		
 		while(true){
+        	
+			try {
+				selector.select();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	
 			Iterator i = selector.selectedKeys().iterator();
 			
 			while(i.hasNext()){
 				SelectionKey key = (SelectionKey) i.next();
+				i.remove();
 				
 				if(key.isConnectable()){
-					
+					prep_connection(key);
 				} else if(key.isReadable()){
 					String result = checkOperation(key);
 					
@@ -81,9 +96,12 @@ public class ToeClient implements Runnable {
 		try{
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
-	        if(!socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort))){
-	        		socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
-	        }
+	     //   try{
+	    //    	socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
+	       
+	    //    } catch (ConnectionPendingException e){
+	        	socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
+	    //    }
 	        SelectorProvider provider = SelectorProvider.provider();
 	        Log.i(TAG, provider.toString());
 	        selector = SelectorProvider.provider().openSelector();
@@ -94,6 +112,21 @@ public class ToeClient implements Runnable {
     		Log.i(TAG, "Client Failed To Establish with Host");
     		e.printStackTrace();
     	}
+	}
+	
+	private void prep_connection(SelectionKey key){
+		try {
+			if(socketChannel.finishConnect()){
+				key.interestOps(SelectionKey.OP_READ);
+				System.out.println("Connected!");
+			}else{
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			key.cancel();
+			Log.d("Client", e.getCause().toString());
+		}
 	}
 	
 	private void readMessage(SelectionKey key){
@@ -130,7 +163,7 @@ public class ToeClient implements Runnable {
 	}
 	
 	public void writeMessage(String message, String userName)
-	{	final String m = Ops.MESSAGE + userName + " : " + message ;
+	{	final String m = userName + " : " + message ;
 		
 		Thread thread = new Thread()
 		{

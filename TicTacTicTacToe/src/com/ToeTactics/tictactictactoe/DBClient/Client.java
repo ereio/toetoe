@@ -83,17 +83,17 @@ public class Client implements Runnable{
         		
         		if(key.isConnectable()){
         			
-        				try {
-							if(socketChannel.finishConnect()){
-								key.interestOps(SelectionKey.OP_READ);
-								System.out.println("Connected!");
-							}else{
-								
-							}
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							key.cancel();
-	        				Log.d("Client", e.getCause().toString());
+        			try {
+						if(socketChannel.finishConnect()){
+							key.interestOps(SelectionKey.OP_READ);
+							System.out.println("Connected!");
+						}else{
+							
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						key.cancel();
+        				Log.d("Client", e.getCause().toString());
 						}
         		}else if( key.isReadable() ){
         			readMessage(key);

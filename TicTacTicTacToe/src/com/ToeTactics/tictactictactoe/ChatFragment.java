@@ -22,7 +22,7 @@ public class ChatFragment extends Fragment{
 	LinearLayout layout;
 	EditText message;
 	
-	// Client client = null;
+	//Client client = null;
 	ToeClient client = null;
 	Context fContext = null;
 	String userName = null;
@@ -35,11 +35,15 @@ public class ChatFragment extends Fragment{
 	
 	@Override
 	public void onStart(){
+		super.onStart();
 		init();
 //		client = new Client(layout, getActivity());
 //		Thread t = new Thread(client);
 //		t.start();
-		super.onStart();
+		client = new ToeClient(layout, getActivity());
+		Thread t = new Thread(client);
+		t.start();
+		
 	}
 	
 	public void init(){
@@ -58,7 +62,7 @@ public class ChatFragment extends Fragment{
 		layout = (LinearLayout) getView().findViewById(R.id.container);
 	}
 	
-	public void setClient(ToeClient c){
-		client = c;
-	}
+//	public void setClient(ToeClient c){
+//		client = c;
+//	}
 }
