@@ -101,9 +101,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	private void ui_init(){
-		bLogin = (Button) findViewById(R.id.LoginButton);
-		eUsername = (EditText) findViewById(R.id.UsernameEntry);
-		ePassword = (EditText) findViewById(R.id.PasswordEntry);
+		//bLogin = (Button) findViewById(R.id.LoginButton);
+		//eUsername = (EditText) findViewById(R.id.UsernameEntry);
+		//ePassword = (EditText) findViewById(R.id.PasswordEntry);
 		
 		nameEntry = new String();
 		passEntry = new String();

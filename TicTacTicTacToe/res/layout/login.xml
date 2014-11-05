@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
         android:text="@string/app_name" />
-
+<!--  
     <Button
         android:id="@+id/LoginButton"
         android:layout_width="wrap_content"
@@ -48,8 +48,8 @@
 
         <requestFocus />
     </EditText>
-
-        <com.facebook.widget.LoginButton
+-->
+    <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
     	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,8 +57,8 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        />
-    
+    />
+<!--    
     <EditText
         android:id="@+id/UsernameEntry"
         android:layout_width="wrap_content"
@@ -78,5 +78,5 @@
         android:layout_alignTop="@+id/LoginButton"
         android:layout_marginRight="18dp"
         android:text="@string/ChangePass" />
-  
+ --> 
 </RelativeLayout>
