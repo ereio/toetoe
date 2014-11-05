@@ -43,30 +43,32 @@
         android:layout_below="@+id/UsernameEntry"
         android:layout_marginTop="22dp"
         android:ems="10"
-        android:hint="@string/Password_signin" >
+        android:hint="@string/Password_signin" 
+        android:visibility="invisible">
 
         <requestFocus />
     </EditText>
 
-    <ImageButton
-        android:id="@+id/twitterLogin"
-        android:layout_width="wrap_content"
+        <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+    	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/AppTitleText"
+        android:layout_below="@+id/AppTitleText"    
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:contentDescription="@string/description"
-        android:src="@drawable/twittersignin" />
-
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        />
+    
     <EditText
         android:id="@+id/UsernameEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/twitterLogin"
+        android:layout_below="@+id/authButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="@string/Username_signin" />
+        android:hint="@string/Username_signin" 
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/ChangePassButton"
