@@ -22,8 +22,7 @@ public class ChatFragment extends Fragment{
 	LinearLayout layout;
 	EditText message;
 	
-	//Client client = null;
-	ToeClient client = null;
+
 	Context fContext = null;
 	String userName = null;
 	
@@ -40,9 +39,9 @@ public class ChatFragment extends Fragment{
 //		client = new Client(layout, getActivity());
 //		Thread t = new Thread(client);
 //		t.start();
-		client = new ToeClient(layout, getActivity());
-		Thread t = new Thread(client);
-		t.start();
+//		client = new ToeClient(getActivity());
+//		Thread t = new Thread(client);
+//		t.start();
 		
 	}
 	
@@ -54,7 +53,7 @@ public class ChatFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				String m = message.getText().toString();
-				client.writeMessage(m,userName);
+				((GameBoard)getActivity()).sendMessage(m);
 				
 			}
 		});
@@ -62,7 +61,14 @@ public class ChatFragment extends Fragment{
 		layout = (LinearLayout) getView().findViewById(R.id.container);
 	}
 	
-//	public void setClient(ToeClient c){
-//		client = c;
-//	}
+	public void setMessage(String message){
+		TextView t = new TextView(getActivity());
+		message.trim();
+		
+		if(!message.isEmpty()){
+			t.setText(message);
+			layout.addView(t);
+		}
+		
+	}
 }

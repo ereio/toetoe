@@ -179,51 +179,6 @@ public class Client implements Runnable{
 		};
 		thread.start();
 	}
-	
-	public void writeJSONBoard(String board){
-		final String JSONBoard = board;
-		Thread thread = new Thread()
-		{
-			@Override
-			public void run(){
-				
-				buffer.clear();
-		
-				buffer = ByteBuffer.wrap(JSONBoard.getBytes());
-		
-				if(buffer != null){
-					buffer.order(ByteOrder.BIG_ENDIAN);
-					
-					System.out.println( "BYTES: " + new String(buffer.array()));
-					try {
-						int bytesWritten = socketChannel.write(buffer);
-				
-						if(bytesWritten != -1){
-							socketChannel.register(selector, SelectionKey.OP_READ);
-						}
-				
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}else{
-					System.out.println("MESSAGE IS NULL!");
-				}
-			}
-		};
-		thread.start();
-	}
-	
-	private void readJSONBoard(){
-		
-		
-	}
-	
-	private void readConnectedUsers(){
-		
-		
-		
-	}
-	
+
 
 }

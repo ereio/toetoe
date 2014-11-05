@@ -16,6 +16,8 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.ToeTactics.tictactictactoe.GameBoard;
+
 import android.app.Activity;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -38,11 +40,6 @@ public class ToeClient implements Runnable {
 	
 	Map list = new HashMap<SelectionKey, byte[]>();
 
-	
-	public ToeClient(LinearLayout l, Activity a){
-		activity = a;
-		layout = l;
-	}
 	
 	public ToeClient(Activity a){
 		activity = a;
@@ -73,10 +70,12 @@ public class ToeClient implements Runnable {
 					String result = checkOperation(key);
 					
 					if(result == Ops.MESSAGE){
-						readMessage(key);
+						incomingMessage(key);
 					} else if(result == Ops.BOARD){
-						
+						incomingBoard(key);
 					} else if(result == Ops.MESSAGE){
+						incomingPlayerRequest(key);
+					} else if(result == Ops.INVALID){
 						
 					}
 				} else if(key.isWritable()){
@@ -129,54 +128,21 @@ public class ToeClient implements Runnable {
 		}
 	}
 	
-	private void readMessage(SelectionKey key){
-		try {
-			SocketChannel channel = (SocketChannel)key.channel();
-			int bytesRead;
-			
-			while( (bytesRead = channel.read(buffer)) != 0){							 
-				final String rMessage = convertByteBufferToString(buffer, bytesRead);
-				//final String[] rMessage = byteMessage.split("=");
-				
-				if(bytesRead == -1 ){
-					
-				}else{
-					this.activity.runOnUiThread(new Runnable(){
-						@Override
-						public void run() {
-							TextView t = new TextView(activity);
-							rMessage.trim();
-							
-							if(!rMessage.isEmpty()){
-								t.setText(rMessage);
-								layout.addView(t);
-							}
-						}
-					});
-				}
-			}						
-			buffer.clear();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
-	public void writeMessage(String message, String userName)
-	{	final String m = userName + " : " + message ;
+	public void outgoingMessage(String message, String userName)
+	{	final String m = Ops.MESSAGE + userName + " : " + message;
 		
 		Thread thread = new Thread()
 		{
 			@Override
 			public void run(){
-				
 				buffer.clear();
-		
 				buffer = ByteBuffer.wrap(m.getBytes());
 		
 				if(buffer != null){
 					buffer.order(ByteOrder.BIG_ENDIAN);
 					System.out.println( "BYTES: " + new String(buffer.array()));
+					
 					try {
 						int bytesWritten = socketChannel.write(buffer);
 				
@@ -191,23 +157,118 @@ public class ToeClient implements Runnable {
 				}else{
 					System.out.println("MESSAGE IS NULL!");
 				}
+				
+				Log.i(TAG, "outgoingMessage Finished");
 			}
 		};
 		thread.start();
 	}
 	
-	public void updateActingLayout(LinearLayout l){
-		layout = l;
+	public void outgoingBoard(String JSON_Board){
+		final String b = Ops.BOARD + JSON_Board;
+		Thread thread = new Thread(){
+			@Override
+			public void run(){
+			
+			buffer.clear();	
+			buffer = ByteBuffer.wrap(b.getBytes());
+			
+			if(buffer != null){
+				buffer.order(ByteOrder.BIG_ENDIAN);
+				System.out.println(TAG + " OUTGOING B:" + new String (buffer.array()));
+				
+				try{
+					int byteWritten = socketChannel.write(buffer);
+					
+					if(byteWritten != -1){
+						socketChannel.register(selector, SelectionKey.OP_READ);
+					}
+				} catch (IOException e) { 
+				   e.printStackTrace(); }
+				
+			}
+			}
+		};
 	}
+	
+	public void outgoingPlayerRequest(String curUsername, String friendUsername){
+		
+		
+	}
+	
+	public void incomingBoard(SelectionKey key){
+		try {
+			SocketChannel channel = (SocketChannel)key.channel();
+			int bytesRead;
+			
+			while( (bytesRead = channel.read(buffer)) != 0){							 
+				String opBoard = convertByteBufferToString(buffer, bytesRead);
+				final String rBoard = parseOpFromString(opBoard);
+				
+				if(bytesRead == -1 ){
+					
+				}else{
+					this.activity.runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+						((GameBoard) activity).receiveBoard(rBoard);
+						}
+					});
+				}
+			}						
+			buffer.clear();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void incomingMessage(SelectionKey key){
+		try {
+			SocketChannel channel = (SocketChannel)key.channel();
+			int bytesRead;
+			
+			while( (bytesRead = channel.read(buffer)) != 0){							 
+				String opMessage = convertByteBufferToString(buffer, bytesRead);
+				final String rMessage = parseOpFromString(opMessage);
+				
+				if(bytesRead == -1 ){
+					
+				}else{
+					this.activity.runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+						((GameBoard) activity).receiveMessage(rMessage);
+						}
+					});
+				}
+			}						
+			buffer.clear();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void incomingPlayerRequest(SelectionKey key){
+		
+	}
+	
+	
 	
 	public String checkOperation(SelectionKey key){
 		try{
 		
 		SocketChannel channel = (SocketChannel) key.channel();
-		int numBytes = channel.read(buffer);
-		String bData = convertByteBufferToString(buffer, numBytes);
-		return findOpsFromString(bData);
-		
+		int numBytes = 0;
+		// PROBLEM, NO BITES IN THE CHANNELS BUFFER
+		numBytes = channel.read(buffer);
+		while( (numBytes = channel.read(buffer)) != 0){
+			String bData = convertByteBufferToString(buffer, numBytes);
+			return findOpsFromString(bData);
+		}
 		} catch (IOException e){
 			e.printStackTrace();
 		}

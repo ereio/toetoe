@@ -34,25 +34,22 @@ public class GameBoard extends Activity{
 	private ToeClient client;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String[] players = {"Joe", "Sally", "Bob"};
-	private String curPlayer = "DudeGuy";
+	private String username = "DudeGuy";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
-		// Starts client
-		//client = new ToeClient(this);
-		//Thread t = new Thread(client);
-		//t.start();
 		
 		// Init UI Components and Links with client
 		ui_init();
 		
-		// Pass Clients
-//		pass_client();
-
-
-		if(savedInstanceState == null){
+		// Starts client
+		client = new ToeClient(this);
+		Thread t = new Thread(client);
+		t.start();
+		
+		if(savedInstanceState != null){
 		//	SwitchPlayerBoard(NOGAME);
 		}
 		Log.i(TAG, "Passing onCreate");
@@ -115,14 +112,15 @@ public class GameBoard extends Activity{
 	private void SwitchPlayerBoard(String player){
 		// must query for board moves related to a player
 		// if none, it will need to create a new game instance
-		String boardMoves;
+		
+		// POTENTIALLY OBSOLTE, Might just need to call sendPlayerPlayRequest() 
+		String JSON_board = "";
 		
 		if(player != NOGAME){
-			boardMoves = "X__O__OXXXO _XO";
 			// will rerender the correct board for the players involved
 			Fragment fNewBoard = new GameBoardFragment();
 			Bundle boardArgs = new Bundle();
-			boardArgs.putString(BOARDKEY, boardMoves);
+			boardArgs.putString(BOARDKEY, JSON_board);
 			
 			FragmentManager fManager = getFragmentManager();
 			FragmentTransaction fTrans = fManager.beginTransaction();
@@ -130,7 +128,7 @@ public class GameBoard extends Activity{
 			fTrans.commit();
 		}
 		else{
-			boardMoves = "";
+			JSON_board = "";
 		}
 
 		
@@ -163,11 +161,9 @@ public class GameBoard extends Activity{
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		
-		// Creates player list array
+		// Creates player list array // WHERE PLAYERS ARE SET
 		playerList.setAdapter(new ArrayAdapter<String>(this, R.layout.player_entry, players));
 		playerList.setOnItemClickListener(new PlayerClickListener());
-		
-		
 		
 	}
 	
@@ -180,18 +176,42 @@ public class GameBoard extends Activity{
 		fTrans.add(R.id.right_chat, fChat);
 		fTrans.commit();
 	}
+
+	// FUNCTIONS FOR CLIENT / ACTIVTY NIO
+	// --------------------------------------------------------
 	
-//	private void pass_client(){
-//		Fragment chatFrag = getFragmentManager().findFragmentById(R.id.right_chat);
-//		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.right_chat);
-//		if(chatFrag instanceof ChatFragment){
-		//	((ChatFragment) chatFrag).setClient(client); 
-//		}
-//		if(boardFrag instanceof GameBoardFragment){
-//			((GameBoardFragment) boardFrag).setClient(client);
-//		}
+	public void sendMessage(String message){
+		client.outgoingMessage(message, username);
+	}
+	
+	public void sendPlayerPlayRequest(String curUserame, String friendUsername){
+		client.outgoingPlayerRequest(curUserame, friendUsername);
+	}
+	
+	public void sendBoard(String JSON_Board){
+		client.outgoingBoard(JSON_Board);
 		
-//	}
+	}
+	
+	public void receiveMessage(String message){
+		Fragment chatFrag = getFragmentManager().findFragmentById(R.id.right_chat);
+		if(chatFrag instanceof ChatFragment)
+		((ChatFragment) chatFrag).setMessage(message);
+	}
+	
+	public void receiveBoard(String JSON_Board){
+		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.game_display);
+		if(boardFrag instanceof GameBoardFragment){
+			((GameBoardFragment) boardFrag).init(username, JSON_Board);
+		}
+	}
+	
+	public void receivePlayerList(){
+		
+		
+	}
+	// END FUNCTIONS FOR CLIENT / ACTIVITY NIO
+	// --------------------------------------------------------
 	
 	// Used to sync the Drawer state 
 	@Override
@@ -223,7 +243,7 @@ public class GameBoard extends Activity{
 			boolean isPlayerOpened = mDrawerLayout.isDrawerOpen(playerList);
 			boolean isChatOpened = mDrawerLayout.isDrawerOpen(mChat);
 			if(isChatOpened){
-				getActionBar().setTitle(curPlayer + " " + getString(R.string.ChatPrompt));
+				getActionBar().setTitle(username + " " + getString(R.string.ChatPrompt));
 			}
 			if(isPlayerOpened){
 				getActionBar().setTitle(getString(R.string.PlayersPrompt));

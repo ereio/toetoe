@@ -23,7 +23,6 @@ public class GameBoardFragment extends Fragment {
 	Board board = new Board();
 	char x_or_o;
 	String username;
-	ToeClient client = null;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		if(state != null){
@@ -142,9 +141,6 @@ public class GameBoardFragment extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
-		client = new ToeClient(getActivity());
-		Thread t = new Thread(client);
-		t.start();
 		//Board Coordinates Reference
 		//        0         1         2
 		//     0  1  2   0  1  2   0  1  2
@@ -676,7 +672,4 @@ public class GameBoardFragment extends Fragment {
 		});
 	}
 	
-	public void setClient(ToeClient c){
-		client = c;
-	}
 }
