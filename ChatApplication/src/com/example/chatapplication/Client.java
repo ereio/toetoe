@@ -41,10 +41,16 @@ public class Client implements Runnable{
 		layout = l;
 		activity = a;
 		
+
+		
+	}
+
+	
+	public void run() {
 		try{
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
-	        socketChannel.connect(new InetSocketAddress("192.168.16.1", 2768));
+	        socketChannel.connect(new InetSocketAddress("192.168.0.18", 40052));
 	        
 	        //SelectorProvider provider = SelectorProvider.provider();
 	        selector = SelectorProvider.provider().openSelector();
@@ -54,12 +60,6 @@ public class Client implements Runnable{
     	}catch(IOException e){
     		e.printStackTrace();
     	}
-		
-	}
-
-	
-	public void run() {
-		
         while( true ){
         	
         	//processor.startDataProcessing();
@@ -142,8 +142,11 @@ public class Client implements Runnable{
         }//End of Main Run Loop
 	}//End of Run Method
 	
-	public void write(String message){
-		
+	public void write(String rMessage){
+		final String message = rMessage;
+		Thread thread = new Thread(){
+			@Override
+			public void run(){
 		buffer.clear();
 		
 		buffer = ByteBuffer.wrap(message.getBytes());
@@ -165,6 +168,9 @@ public class Client implements Runnable{
 		}else{
 			System.out.println("MESSAGE IS NULL!");
 		}
+			}
+		};
+		thread.start();
 	}
 	
 }

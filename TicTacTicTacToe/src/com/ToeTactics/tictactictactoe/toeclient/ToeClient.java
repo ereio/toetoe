@@ -2,6 +2,7 @@ package com.ToeTactics.tictactictactoe.toeclient;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.ConnectionPendingException;
@@ -9,6 +10,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,8 +32,10 @@ public class ToeClient implements Runnable {
 	Selector selector = null;
 	
 	String dataString;
+	ArrayList<Socket> servers = new ArrayList<Socket>();
 	
 	ByteBuffer buffer = ByteBuffer.allocate(1024);
+	String clientData;
 	LinearLayout layout;
 	
 	Activity activity;
@@ -69,13 +73,13 @@ public class ToeClient implements Runnable {
 				} else if(key.isReadable()){
 					String result = checkOperation(key);
 					
-					if(result == Ops.MESSAGE){
-						incomingMessage(key);
-					} else if(result == Ops.BOARD){
-						incomingBoard(key);
-					} else if(result == Ops.MESSAGE){
-						incomingPlayerRequest(key);
-					} else if(result == Ops.INVALID){
+					if(result.equals(Ops.MESSAGE)){
+						incomingMessage(clientData);
+					} else if(result.equals(Ops.BOARD)){
+						incomingBoard(clientData);
+					} else if(result.equals(Ops.PLAYERS)){
+						incomingPlayerRequest(buffer);
+					} else if(result.equals(Ops.INVALID)){
 						
 					}
 				} else if(key.isWritable()){
@@ -95,18 +99,18 @@ public class ToeClient implements Runnable {
 		try{
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
-	     //   try{
-	    //    	socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
-	       
-	    //    } catch (ConnectionPendingException e){
+	        try{
+	        	//socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
 	        	socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
-	    //    }
+	        } catch (ConnectionPendingException e){
+	        	
+	        }	
 	        SelectorProvider provider = SelectorProvider.provider();
 	        Log.i(TAG, provider.toString());
 	        selector = SelectorProvider.provider().openSelector();
-	        
 	        socketChannel.register(selector, SelectionKey.OP_CONNECT);
 	        
+	        servers.add(socketChannel.socket());
     	}catch(IOException e){
     		Log.i(TAG, "Client Failed To Establish with Host");
     		e.printStackTrace();
@@ -136,7 +140,7 @@ public class ToeClient implements Runnable {
 		{
 			@Override
 			public void run(){
-				buffer.clear();
+				buffer.flip();
 				buffer = ByteBuffer.wrap(m.getBytes());
 		
 				if(buffer != null){
@@ -196,84 +200,53 @@ public class ToeClient implements Runnable {
 		
 	}
 	
-	public void incomingBoard(SelectionKey key){
-		try {
-			SocketChannel channel = (SocketChannel)key.channel();
-			int bytesRead;
-			
-			while( (bytesRead = channel.read(buffer)) != 0){							 
-				String opBoard = convertByteBufferToString(buffer, bytesRead);
-				final String rBoard = parseOpFromString(opBoard);
-				
-				if(bytesRead == -1 ){
-					
-				}else{
+	public void incomingBoard(String data){
+					final String rBoard = data;
 					this.activity.runOnUiThread(new Runnable(){
 						@Override
 						public void run() {
 						((GameBoard) activity).receiveBoard(rBoard);
 						}
 					});
-				}
-			}						
-			buffer.clear();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+				}				
 	
-	public void incomingMessage(SelectionKey key){
-		try {
-			SocketChannel channel = (SocketChannel)key.channel();
-			int bytesRead;
-			
-			while( (bytesRead = channel.read(buffer)) != 0){							 
-				String opMessage = convertByteBufferToString(buffer, bytesRead);
-				final String rMessage = parseOpFromString(opMessage);
-				
-				if(bytesRead == -1 ){
-					
-				}else{
+	public void incomingMessage(String data){
+					final String rMessage = data;
 					this.activity.runOnUiThread(new Runnable(){
 						@Override
 						public void run() {
 						((GameBoard) activity).receiveMessage(rMessage);
 						}
 					});
-				}
-			}						
-			buffer.clear();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
-	public void incomingPlayerRequest(SelectionKey key){
+	public void incomingPlayerRequest(ByteBuffer buffer){
 		
 	}
 	
 	
 	
 	public String checkOperation(SelectionKey key){
-		try{
 		
+	
+		String opData = null;
 		SocketChannel channel = (SocketChannel) key.channel();
 		int numBytes = 0;
+		buffer.clear();
+	
 		// PROBLEM, NO BITES IN THE CHANNELS BUFFER
-		numBytes = channel.read(buffer);
-		while( (numBytes = channel.read(buffer)) != 0){
-			String bData = convertByteBufferToString(buffer, numBytes);
-			return findOpsFromString(bData);
-		}
-		} catch (IOException e){
+		try {
+			while( (numBytes = channel.read(buffer)) != 0){
+				opData = convertByteBufferToString(buffer, numBytes);
+				clientData = parseOpFromString(opData);
+				opData = findOpsFromString(opData);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return Ops.INVALID;
+		buffer.rewind();
+		return opData;
 	}
 	
 	public String parseOpFromString(String bData){
@@ -285,7 +258,7 @@ public class ToeClient implements Runnable {
 	
 	public String findOpsFromString(String bData){
 		int opIndex = bData.indexOf(":");
-		String foundCode = bData.substring(0,opIndex);
+		String foundCode = bData.substring(0,opIndex+1);
 		return foundCode;
 	}
 	

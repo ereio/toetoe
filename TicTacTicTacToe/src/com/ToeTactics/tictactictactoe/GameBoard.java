@@ -34,7 +34,7 @@ public class GameBoard extends Activity{
 	private ToeClient client;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String[] players = {"Joe", "Sally", "Bob"};
-	private String username = "DudeGuy";
+	private String username = "DefaultName";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class GameBoard extends Activity{
 		client = new ToeClient(this);
 		Thread t = new Thread(client);
 		t.start();
-		
+
 		if(savedInstanceState != null){
 		//	SwitchPlayerBoard(NOGAME);
 		}
