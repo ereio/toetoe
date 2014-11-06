@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	String usr; // stores facebook name 
 	
 	String nameEntry;
+	String passEntry;
 	String friendsList;
 	
 	@Override
@@ -81,7 +82,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		fbButton = (Button)findViewById(R.id.authButton);
 		fbButton.setOnClickListener(this);
 		
-		//ui_init();
+		ui_init();
 		
 	}
 
@@ -107,7 +108,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	/*
+	
 	private void ui_init(){
 		bLogin = (Button) findViewById(R.id.LoginButton);
 		eUsername = (EditText) findViewById(R.id.UsernameEntry);
@@ -122,7 +123,6 @@ public class MainActivity extends Activity implements OnClickListener {
 				nameEntry = eUsername.getText().toString();
 				passEntry = ePassword.getText().toString();
 				if(Auth()){
-					StartGame();
 				}
 			}
 		});
@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private boolean Auth(){
 		return true;
 	}
-	*/
+	
 	
 	private void StartGame(){
 		Bundle extras = new Bundle();
@@ -179,7 +179,6 @@ public class MainActivity extends Activity implements OnClickListener {
 					
 					getFacebookName();
 					getFacebookFriends();
-					
 					StartGame();
 
 				}

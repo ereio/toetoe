@@ -36,12 +36,6 @@ public class ChatFragment extends Fragment{
 	public void onStart(){
 		super.onStart();
 		init();
-//		client = new Client(layout, getActivity());
-//		Thread t = new Thread(client);
-//		t.start();
-//		client = new ToeClient(getActivity());
-//		Thread t = new Thread(client);
-//		t.start();
 		
 	}
 	

@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
         android:text="@string/app_name" />
-<!--  
+  
     <Button
         android:id="@+id/LoginButton"
         android:layout_width="wrap_content"
@@ -34,21 +34,6 @@
         android:layout_toRightOf="@+id/AppTitleText"
         android:text="@string/Login" />
 
-    <EditText
-        android:id="@+id/PasswordEntry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_alignLeft="@+id/UsernameEntry"
-        android:layout_below="@+id/UsernameEntry"
-        android:layout_marginTop="22dp"
-        android:ems="10"
-        android:hint="@string/Password_signin" 
-        android:visibility="invisible">
-
-        <requestFocus />
-    </EditText>
--->
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
     	android:layout_width="wrap_content"
@@ -58,17 +43,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
     />
-<!--    
-    <EditText
-        android:id="@+id/UsernameEntry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/authButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="@string/Username_signin" 
-        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/ChangePassButton"
@@ -78,5 +52,27 @@
         android:layout_alignTop="@+id/LoginButton"
         android:layout_marginRight="18dp"
         android:text="@string/ChangePass" />
- --> 
+
+    <EditText
+        android:id="@+id/UsernameEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/authButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:ems="10"
+        android:hint="@string/Username_signin"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/PasswordEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/UsernameEntry"
+        android:layout_below="@+id/UsernameEntry"
+        android:ems="10"
+        android:hint="@string/Password_signin"
+        android:inputType="textPassword"
+        android:visibility="visible" />
+ 
 </RelativeLayout>
