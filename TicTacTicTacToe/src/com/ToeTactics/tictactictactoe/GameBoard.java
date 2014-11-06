@@ -38,8 +38,10 @@ public class GameBoard extends Activity{
 	private FrameLayout mBoard;
 	private ToeClient client;
 	private ActionBarDrawerToggle mDrawerToggle;
+	
 	private String[] players = {"Joe", "Sally", "Bob"};
 	private String username = "DefaultName";
+	public String userID = "0";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class GameBoard extends Activity{
 			
 			if(getIntent().getExtras().getString(MainActivity.USER) != null){
 				username = getIntent().getExtras().getString(MainActivity.USER);
+			}
+			if(getIntent().getExtras().getString(MainActivity.USERIDKEY) != null){
+				userID = getIntent().getExtras().getString(MainActivity.USERIDKEY);
 			}
 			try {
 				if(getIntent().getExtras().getString(MainActivity.FRIENDS) != null){

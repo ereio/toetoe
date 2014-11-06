@@ -41,6 +41,8 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements OnClickListener {
 	public final static String USER = "UserKey";
 	public final static String FRIENDS = "FriendListKey";
+	public final static String USERIDKEY = "UserIdKey";
+	
 	String APP_ID;
 	Facebook fb;
 	Button fbButton;
@@ -54,6 +56,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	String nameEntry;
 	String passEntry;
 	String friendsList;
+	String userIDEntry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +145,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(friendsList != null && !friendsList.equals("")){
 			extras.putString(FRIENDS, friendsList);
 		}
+		if(userIDEntry != null && !userIDEntry.equals("")){
+			extras.putString(USERIDKEY, userIDEntry);
+		}
 		//extras.putString("access_token", access_token);
 		Intent success = new Intent(getApplicationContext(), GameBoard.class);
 		success.putExtras(extras);
@@ -216,7 +222,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				try {
 					JSONObject JSONresponse = new JSONObject(response);
 					nameEntry = JSONresponse.getString("name");
-					Log.i("MainActivity", nameEntry);
+					//Log.i("MainActivity", nameEntry);
+					userIDEntry = JSONresponse.getString("id");
+					
 					getFacebookFriends();
 					
 				} catch (JSONException e) {
