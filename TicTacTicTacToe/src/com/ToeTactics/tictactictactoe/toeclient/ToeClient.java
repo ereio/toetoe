@@ -100,8 +100,8 @@ public class ToeClient implements Runnable {
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
 	        try{
-	        	//socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
-	        	socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
+	        	socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
+	        	//socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
 	        } catch (ConnectionPendingException e){
 	        	
 	        }	
