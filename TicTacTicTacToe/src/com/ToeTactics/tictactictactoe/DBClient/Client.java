@@ -50,8 +50,8 @@ public class Client implements Runnable{
 		try{
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
-	        socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
-	        //socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
+	        //socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
+	        socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
 	        
 	        //SelectorProvider provider = SelectorProvider.provider();
 	        selector = SelectorProvider.provider().openSelector();
@@ -83,56 +83,20 @@ public class Client implements Runnable{
         		
         		if(key.isConnectable()){
         			
-        				try {
-							if(socketChannel.finishConnect()){
-								key.interestOps(SelectionKey.OP_READ);
-								System.out.println("Connected!");
-							}else{
-								
-							}
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							key.cancel();
-	        				Log.d("Client", e.getCause().toString());
+        			try {
+						if(socketChannel.finishConnect()){
+							key.interestOps(SelectionKey.OP_READ);
+							System.out.println("Connected!");
+						}else{
+							
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						key.cancel();
+        				Log.d("Client", e.getCause().toString());
 						}
         		}else if( key.isReadable() ){
-        			
-        			SocketChannel channel = (SocketChannel)key.channel();
-        			
-        			try {
-        				
-						int bytesRead;
-						
-						while( (bytesRead = channel.read(buffer)) != 0){							 
-							
-							if(bytesRead == -1){
-								
-							}else{
-								
-								this.activity.runOnUiThread(new Runnable(){
-									@Override
-									public void run() {
-										TextView t = new TextView(activity);
-										
-										byte[]array = buffer.array();
-										String message = new String(array);
-										
-										message.trim();
-										
-										if(!message.isEmpty()){
-											t.setText(message);
-											layout.addView(t);
-										}
-									}
-								});
-							}
-						}						
-
-						buffer.clear();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+        			readMessage(key);
         			
         		}else if(key.isWritable()){
         			
@@ -143,6 +107,44 @@ public class Client implements Runnable{
         	}//End Of Iterator Loop     	    
         }//End of Main Run Loop
 	}//End of Run Method
+	
+	private void readMessage(SelectionKey key){
+		try {
+			
+			SocketChannel channel = (SocketChannel)key.channel();
+			int bytesRead;
+			
+			while( (bytesRead = channel.read(buffer)) != 0){							 
+				
+				if(bytesRead == -1){
+					
+				}else{
+					
+					this.activity.runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+							TextView t = new TextView(activity);
+							
+							byte[]array = buffer.array();
+							String message = new String(array);
+							
+							message.trim();
+							
+							if(!message.isEmpty()){
+								t.setText(message);
+								layout.addView(t);
+							}
+						}
+					});
+				}
+			}						
+
+			buffer.clear();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void writeMessage(String message, String userName)
 	{	final String m = userName + " : " + message ;
@@ -177,49 +179,6 @@ public class Client implements Runnable{
 		};
 		thread.start();
 	}
-	
-	public void writeJSONBoard(String board){
-		final String JSONBoard = board;
-		Thread thread = new Thread()
-		{
-			@Override
-			public void run(){
-				
-				buffer.clear();
-		
-				buffer = ByteBuffer.wrap(JSONBoard.getBytes());
-		
-				if(buffer != null){
-					buffer.order(ByteOrder.BIG_ENDIAN);
-					
-					System.out.println( "BYTES: " + new String(buffer.array()));
-					try {
-						int bytesWritten = socketChannel.write(buffer);
-				
-						if(bytesWritten != -1){
-							socketChannel.register(selector, SelectionKey.OP_READ);
-						}
-				
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}else{
-					System.out.println("MESSAGE IS NULL!");
-				}
-			}
-		};
-		thread.start();
-	}
-	
-	private void readJSONBoard(){
-		
-		
-	}
-	
-	private void readConnectUsers(){
-		
-		
-		
-	}
+
+
 }

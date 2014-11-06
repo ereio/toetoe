@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ToeTactics.tictactictactoe.DBClient.Client;
+import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 public class ChatFragment extends Fragment{
 	
@@ -21,7 +22,7 @@ public class ChatFragment extends Fragment{
 	LinearLayout layout;
 	EditText message;
 	
-	Client client = null;
+
 	Context fContext = null;
 	String userName = null;
 	
@@ -33,11 +34,15 @@ public class ChatFragment extends Fragment{
 	
 	@Override
 	public void onStart(){
-		init();
-		client = new Client(layout, getActivity());
-		Thread t = new Thread(client);
-		t.start();
 		super.onStart();
+		init();
+//		client = new Client(layout, getActivity());
+//		Thread t = new Thread(client);
+//		t.start();
+//		client = new ToeClient(getActivity());
+//		Thread t = new Thread(client);
+//		t.start();
+		
 	}
 	
 	public void init(){
@@ -48,11 +53,22 @@ public class ChatFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				String m = message.getText().toString();
-				client.writeMessage(m,userName);
+				((GameBoard)getActivity()).sendMessage(m);
 				
 			}
 		});
 		message = (EditText) getView().findViewById(R.id.message);
 		layout = (LinearLayout) getView().findViewById(R.id.container);
+	}
+	
+	public void setMessage(String message){
+		TextView t = new TextView(getActivity());
+		message.trim();
+		
+		if(!message.isEmpty()){
+			t.setText(message);
+			layout.addView(t);
+		}
+		
 	}
 }
