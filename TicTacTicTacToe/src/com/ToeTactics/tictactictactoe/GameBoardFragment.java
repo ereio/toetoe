@@ -26,18 +26,13 @@ public class GameBoardFragment extends Fragment {
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		if(state != null){
-			Bundle bundle = getArguments();
-			String currentMoves = bundle.getString(GameBoard.BOARDKEY);
-			initBoard(currentMoves);
+			//Bundle bundle = getArguments();
+			//String currentMoves = bundle.getString(GameBoard.BOARDKEY);
+			//initBoard(currentMoves);
 		}
-		//client = new ToeClient(getActivity());
-		//Thread t = new Thread(client);
-		//t.start();
 		
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
-	
-
 	
 	public void init(String user_name, String board_JSON){
 		username = user_name;
