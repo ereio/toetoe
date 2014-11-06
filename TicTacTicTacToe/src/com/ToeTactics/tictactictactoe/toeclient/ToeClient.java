@@ -227,14 +227,11 @@ public class ToeClient implements Runnable {
 	
 	
 	public String checkOperation(SelectionKey key){
-		
-	
 		String opData = null;
 		SocketChannel channel = (SocketChannel) key.channel();
 		int numBytes = 0;
 		buffer.clear();
 	
-		// PROBLEM, NO BITES IN THE CHANNELS BUFFER
 		try {
 			while( (numBytes = channel.read(buffer)) != 0){
 				opData = convertByteBufferToString(buffer, numBytes);

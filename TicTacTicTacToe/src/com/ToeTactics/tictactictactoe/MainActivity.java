@@ -175,7 +175,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				
 				@Override
 				public void onComplete(Bundle values) {
-					//Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
 					
 					getFacebookName();
 					getFacebookFriends();
