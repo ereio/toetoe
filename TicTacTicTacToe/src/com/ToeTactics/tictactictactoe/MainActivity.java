@@ -136,8 +136,12 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private void StartGame(){
 		Bundle extras = new Bundle();
-		extras.putString(USER, nameEntry);
-		extras.putString(FRIENDS, friendsList);
+		if(nameEntry != null && !nameEntry.equals("")){
+			extras.putString(USER, nameEntry);
+		}
+		if(friendsList != null && !friendsList.equals("")){
+			extras.putString(FRIENDS, friendsList);
+		}
 		//extras.putString("access_token", access_token);
 		Intent success = new Intent(getApplicationContext(), GameBoard.class);
 		success.putExtras(extras);
