@@ -233,7 +233,7 @@ public class GameBoard extends Activity{
 	public void receiveBoard(String JSON_Board){
 		Fragment boardFrag = getFragmentManager().findFragmentById(R.id.game_display);
 		if(boardFrag instanceof GameBoardFragment){
-			((GameBoardFragment) boardFrag).init(username, JSON_Board);
+			((GameBoardFragment) boardFrag).initBoard(JSON_Board);
 		}
 	}
 	

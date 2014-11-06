@@ -85,7 +85,8 @@ public class GameBoardFragment extends Fragment {
 	public void initBoard(String JSON_board){
 		if(!JSON_board.equals("")){
 			try {
-				JSONObject game_obj = new JSONObject(JSON_board);
+				// must incapculate with {} with string conversions
+				JSONObject game_obj = new JSONObject("{"+JSON_board+"}");
 				
 				for(int i = 0; i < 3; i++){
 					for(int j = 0; j < 3; j++){
@@ -122,9 +123,13 @@ public class GameBoardFragment extends Fragment {
 			//mark last player since that's who made the move
 			if(board.current_player == Board.O_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
+				// WORKS MUTHA FUCKA
+				((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
 			}
 			if(board.current_player == Board.X_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
+				// WORKS MUTHA FUCKA
+				((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
 			}
 			
 			//check for subgame winner

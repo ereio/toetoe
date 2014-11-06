@@ -100,8 +100,8 @@ public class ToeClient implements Runnable {
 	        socketChannel = SocketChannel.open();
 	        socketChannel.configureBlocking(false);
 	        try{
-	        	socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
-	        	//socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
+	        	//socketChannel.connect(new InetSocketAddress("bearnet.ddns.net", openPort));
+	        	socketChannel.connect(new InetSocketAddress("192.168.0.18", openPort));
 	        } catch (ConnectionPendingException e){
 	        	
 	        }	
@@ -193,6 +193,7 @@ public class ToeClient implements Runnable {
 			}
 			}
 		};
+		thread.start();
 	}
 	
 	public void outgoingPlayerRequest(String curUsername, String friendUsername){
@@ -248,7 +249,7 @@ public class ToeClient implements Runnable {
 	
 	public String parseOpFromString(String bData){
 		int opIndex = bData.indexOf(":");
-		String realData = bData.substring(opIndex+1, bData.length()-1);
+		String realData = bData.substring(opIndex+1, bData.length());
 		return realData;
 
 	}
