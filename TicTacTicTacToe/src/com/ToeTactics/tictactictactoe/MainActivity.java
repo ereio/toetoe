@@ -123,6 +123,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				nameEntry = eUsername.getText().toString();
 				passEntry = ePassword.getText().toString();
 				if(Auth()){
+					StartGame();
 				}
 			}
 		});
@@ -245,8 +246,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	@SuppressWarnings("deprecation")
 	public void getFacebookFriends(){
-		
-		mAsyncRunner.request("me", new RequestListener(){
+		mAsyncRunner.request("me/friends", new RequestListener(){
 
 			@Override
 			public void onComplete(String response, Object state) {
