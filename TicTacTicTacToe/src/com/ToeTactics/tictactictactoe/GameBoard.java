@@ -1,5 +1,10 @@
 package com.ToeTactics.tictactictactoe;
 
+import java.util.ArrayList;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 import android.app.Activity;
@@ -40,6 +45,28 @@ public class GameBoard extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
+		
+		username = getIntent().getExtras().getString(MainActivity.USER);
+		try {
+			
+			JSONObject friendListObj = new JSONObject(getIntent()
+												.getExtras()
+												.getString(MainActivity.FRIENDS));
+		
+			ArrayList<String> tempPlayers = new ArrayList<String> ();
+		
+			for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
+				tempPlayers.add(friendListObj.getJSONArray("data")
+											.getJSONObject(i)
+											.getString("name"));
+			}
+			
+			players = (String[]) tempPlayers.toArray();
+					
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Init UI Components and Links with client
 		ui_init();

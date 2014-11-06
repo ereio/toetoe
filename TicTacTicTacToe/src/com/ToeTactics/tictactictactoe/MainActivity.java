@@ -1,15 +1,19 @@
 package com.ToeTactics.tictactictactoe;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -36,25 +40,28 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 	public final static String USER = "UserKey";
-	public final static String PASS = "PassKey";
+	public final static String FRIENDS = "FriendListKey";
 	String APP_ID;
 	Facebook fb;
 	Button fbButton;
+	AsyncFacebookRunner mAsyncRunner;
+	
 	Button bLogin;
 	EditText eUsername;
 	EditText ePassword;
 	String usr; // stores facebook name 
 	
 	String nameEntry;
-	String passEntry;
+	String friendsList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		
-		APP_ID = getString(R.string.facebook_app_id);
+		APP_ID = getString(R.string.app_id);
 		fb = new Facebook(APP_ID);
+		mAsyncRunner = new AsyncFacebookRunner(fb);
 
 		try {
 	        PackageInfo info = getPackageManager().getPackageInfo(
@@ -74,7 +81,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		fbButton = (Button)findViewById(R.id.authButton);
 		fbButton.setOnClickListener(this);
 		
-		ui_init();
+		//ui_init();
 		
 	}
 
@@ -100,10 +107,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/*
 	private void ui_init(){
-		//bLogin = (Button) findViewById(R.id.LoginButton);
-		//eUsername = (EditText) findViewById(R.id.UsernameEntry);
-		//ePassword = (EditText) findViewById(R.id.PasswordEntry);
+		bLogin = (Button) findViewById(R.id.LoginButton);
+		eUsername = (EditText) findViewById(R.id.UsernameEntry);
+		ePassword = (EditText) findViewById(R.id.PasswordEntry);
 		
 		nameEntry = new String();
 		passEntry = new String();
@@ -123,11 +131,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	private boolean Auth(){
 		return true;
 	}
-		
+	*/
+	
 	private void StartGame(){
 		Bundle extras = new Bundle();
 		extras.putString(USER, nameEntry);
-		extras.putString(PASS, passEntry);
+		extras.putString(FRIENDS, friendsList);
+		//extras.putString("access_token", access_token);
 		Intent success = new Intent(getApplicationContext(), GameBoard.class);
 		success.putExtras(extras);
 		startActivity(success);
@@ -138,20 +148,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		if (fb.isSessionValid())
 		{
-			try 
-			{
+			try {
 				fb.logout(getApplicationContext());
+				
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}
 		else // login
 		{
-			fb.authorize(this, new DialogListener() {
+			fb.authorize(this, new String[] {"user_friends", "public_profile"}, new DialogListener() {
 
 				@Override
 				public void onFacebookError(FacebookError e) {
@@ -167,7 +175,12 @@ public class MainActivity extends Activity implements OnClickListener {
 				
 				@Override
 				public void onComplete(Bundle values) {
-					 Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
+					
+					getFacebookName();
+					getFacebookFriends();
+					
+					StartGame();
 
 				}
 				
@@ -182,8 +195,89 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		
 		fb.authorizeCallback(requestCode, resultCode, data);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void getFacebookName(){
+		
+		mAsyncRunner.request("me", new RequestListener(){
+
+			@Override
+			public void onComplete(String response, Object state) {
+				
+				try {
+					JSONObject JSONresponse = new JSONObject(response);
+					nameEntry = JSONresponse.getString("name");
+					
+				} catch (JSONException e) {
+					Log.e("MainActivity",e.toString());
+				}
+				
+			}
+
+			@Override
+			public void onIOException(IOException e, Object state) {
+				
+			}
+
+			@Override
+			public void onFileNotFoundException(FileNotFoundException e,
+					Object state) {
+				
+			}
+
+			@Override
+			public void onMalformedURLException(MalformedURLException e,
+					Object state) {
+				
+			}
+
+			@Override
+			public void onFacebookError(FacebookError e, Object state) {
+				
+			}
+			
+		});
+		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void getFacebookFriends(){
+		
+		mAsyncRunner.request("me", new RequestListener(){
+
+			@Override
+			public void onComplete(String response, Object state) {
+				
+				friendsList = response;
+			}
+
+			@Override
+			public void onIOException(IOException e, Object state) {
+				
+			}
+
+			@Override
+			public void onFileNotFoundException(FileNotFoundException e,
+					Object state) {
+				
+			}
+
+			@Override
+			public void onMalformedURLException(MalformedURLException e,
+					Object state) {
+				
+			}
+
+			@Override
+			public void onFacebookError(FacebookError e, Object state) {
+				
+			}
+			
+		});
+		
 	}
 }
