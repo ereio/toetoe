@@ -45,26 +45,38 @@ public class GameBoard extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
+		
 		if(getIntent().getExtras() != null){
+			//Log.i(TAG, getIntent().getExtras().getString(MainActivity.FRIENDS));
+			
 			if(getIntent().getExtras().getString(MainActivity.USER) != null){
 				username = getIntent().getExtras().getString(MainActivity.USER);
 			}
 			try {
 				if(getIntent().getExtras().getString(MainActivity.FRIENDS) != null){
-					JSONObject friendListObj = new JSONObject(getIntent()
+					JSONObject friendListObj = new JSONObject("{\"data\":"+getIntent()
 																.getExtras()
-																.getString(MainActivity.FRIENDS));
+																.getString(MainActivity.FRIENDS)+"}");
 				
 		
 					ArrayList<String> tempPlayers = new ArrayList<String> ();
 		
 					for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
+						/*Log.i(TAG,friendListObj.getJSONArray("data")
+												.getJSONObject(i)
+												.getString("name"));
+						*/
 						tempPlayers.add(friendListObj.getJSONArray("data")
 													.getJSONObject(i)
 													.getString("name"));
 					}
-			
-					players = (String[]) tempPlayers.toArray();
+					
+					String[] tempPlayersArray = new String[tempPlayers.size()];
+					for(int i = 0; i < tempPlayers.size(); i++){
+						tempPlayersArray[i] = (String) tempPlayers.get(i);
+					}
+					
+					players = tempPlayersArray;
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

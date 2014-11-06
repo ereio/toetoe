@@ -22,6 +22,7 @@ public class GameBoardFragment extends Fragment {
 	public ImageView[][] sub_winners = new ImageView[3][3];
 	
 	public Board board = new Board();
+	boolean isTurn = true;
 	public char x_or_o;
 	public String username;
 	
@@ -35,7 +36,8 @@ public class GameBoardFragment extends Fragment {
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
-	public JSONArray getBoardAsJSON(){
+	public JSONObject getBoardAsJSON(){
+		JSONObject game = new JSONObject();
 		JSONArray JSONboard = new JSONArray();
 		
 		try{
@@ -54,11 +56,14 @@ public class GameBoardFragment extends Fragment {
 				}
 				JSONboard.put(i, outer_row);
 			}
+			
+			game.put("board", JSONboard);
+			game.put("cur_player", "" + board.current_player);
 		} catch(Exception e){
 			Log.e("GameBoardFragment", e.toString());
 		}
 		
-		return JSONboard;
+		return game;
 	}
 	
 	public void init(String user_name, String board_JSON){
@@ -86,7 +91,7 @@ public class GameBoardFragment extends Fragment {
 		if(!JSON_board.equals("")){
 			try {
 				// must incapculate with {} with string conversions
-				JSONObject game_obj = new JSONObject("{"+JSON_board+"}");
+				JSONObject game_obj = new JSONObject(JSON_board);
 				
 				for(int i = 0; i < 3; i++){
 					for(int j = 0; j < 3; j++){
@@ -112,9 +117,13 @@ public class GameBoardFragment extends Fragment {
 						}
 					}
 				}
+				
+				board.current_player = game_obj.getString("cur_player").charAt(0);
 			} catch (JSONException e) {
 				Log.e("GameBoardFragment",e.toString());
 			}
+			
+			isTurn = true;
 		}
 	}
 	
@@ -123,13 +132,13 @@ public class GameBoardFragment extends Fragment {
 			//mark last player since that's who made the move
 			if(board.current_player == Board.O_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
-				// WORKS MUTHA FUCKA
-				((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
+				
+				//((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
 			}
 			if(board.current_player == Board.X_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
-				// WORKS MUTHA FUCKA
-				((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
+				
+				//((GameBoard)getActivity()).sendBoard("\"board\":" + getBoardAsJSON().toString());
 			}
 			
 			//check for subgame winner
@@ -160,9 +169,11 @@ public class GameBoardFragment extends Fragment {
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
-		//if(board.current_player == x_or_o){
+		if(isTurn){
 			move(i ,j ,k ,l);
-		//}
+			isTurn = false;
+			((GameBoard)getActivity()).sendBoard(getBoardAsJSON().toString());
+		}
 	}
 	
 	@Override

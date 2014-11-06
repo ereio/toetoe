@@ -169,13 +169,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				@Override
 				public void onFacebookError(FacebookError e) {
 					 Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
-					
+					 Log.e("MainActivity", e.toString());
 				}
 				
 				@Override
 				public void onError(DialogError e) {
 					 Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
-					
+					 Log.e("MainActivity", e.toString());
 				}
 				
 				@Override
@@ -183,15 +183,15 @@ public class MainActivity extends Activity implements OnClickListener {
 					Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
 					
 					getFacebookName();
-					getFacebookFriends();
-					StartGame();
+					//getFacebookFriends();
+					//StartGame();
 
 				}
 				
 				@Override
 				public void onCancel() {
 					
-					 Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
+					 //Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
 				}
 			});
 		}	
@@ -211,37 +211,39 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onComplete(String response, Object state) {
+				//Log.i("MainActivity", response);
 				
 				try {
 					JSONObject JSONresponse = new JSONObject(response);
 					nameEntry = JSONresponse.getString("name");
+					Log.i("MainActivity", nameEntry);
+					getFacebookFriends();
 					
 				} catch (JSONException e) {
 					Log.e("MainActivity",e.toString());
 				}
-				
 			}
 
 			@Override
 			public void onIOException(IOException e, Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onFileNotFoundException(FileNotFoundException e,
 					Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onMalformedURLException(MalformedURLException e,
 					Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onFacebookError(FacebookError e, Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 			
 		});
@@ -254,30 +256,38 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onComplete(String response, Object state) {
-				
-				friendsList = response;
+				//Log.i("MainActivity", response);
+				try{
+					JSONObject JSONresponse = new JSONObject(response);
+					friendsList = JSONresponse.getJSONArray("data").toString();
+					Log.i("MainActivity",friendsList);
+					StartGame();
+					
+				} catch(Exception e){
+					Log.e("MainActivity",e.toString());
+				}
 			}
 
 			@Override
 			public void onIOException(IOException e, Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onFileNotFoundException(FileNotFoundException e,
 					Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onMalformedURLException(MalformedURLException e,
 					Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 
 			@Override
 			public void onFacebookError(FacebookError e, Object state) {
-				
+				Log.e("MainActivity",e.toString());
 			}
 			
 		});
