@@ -132,7 +132,7 @@ public class GameBoardFragment extends Fragment {
 		}
 	}
 	
-	private void move(int i, int j, int k, int l){
+	private boolean move(int i, int j, int k, int l){
 		if(board.makeMove(i, j, k, l)){
 			//mark last player since that's who made the move
 			if(board.current_player == Board.O_TILE){
@@ -188,19 +188,23 @@ public class GameBoardFragment extends Fragment {
 				Log.e("GameBoardFrag",e.toString());
 			}
 			((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
-			lastMoveUserID = ((GameBoard) getActivity()).userID;
+			//lastMoveUserID = ((GameBoard) getActivity()).userID;
 			
 			//check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
 				// TODO alert dialog
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
 		//player can't make 2 moves in a row
 		if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
-			move(i ,j ,k ,l);
+			if(move(i ,j ,k ,l)){
+				lastMoveUserID = ((GameBoard) getActivity()).userID;
+			}
 		}
 	}
 	
