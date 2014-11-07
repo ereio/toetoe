@@ -201,11 +201,11 @@ public class GameBoardFragment extends Fragment {
 	
 	public void makeMove(int i, int j, int k, int l){
 		//player can't make 2 moves in a row
-		if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
+		//if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
 			if(move(i ,j ,k ,l)){
 				lastMoveUserID = ((GameBoard) getActivity()).userID;
 			}
-		}
+		//}
 	}
 	
 	@Override
