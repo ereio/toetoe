@@ -164,18 +164,30 @@ public class MainActivity extends Activity implements OnClickListener {
 	//--------------------------------------------------
 	private void StartGame(){
 		Bundle extras = new Bundle();
+		boolean name_set = false;
+		boolean friends_set = false;
+		boolean id_set = false;
 		if(nameEntry != null && !nameEntry.equals("")){
 			extras.putString(USER, nameEntry);
+			name_set = true;
 		}
 		if(friendsList != null && !friendsList.equals("")){
 			extras.putString(FRIENDS, friendsList);
+			friends_set = true;
 		}
 		if(userIDEntry != null && !userIDEntry.equals("")){
 			extras.putString(USERIDKEY, userIDEntry);
+			id_set = true;
 		}
-		Intent success = new Intent(getApplicationContext(), GameBoard.class);
-		success.putExtras(extras);
-		startActivity(success);
+		
+		if(name_set && friends_set && id_set){
+			Intent success = new Intent(getApplicationContext(), GameBoard.class);
+			success.putExtras(extras);
+			startActivity(success);
+		}
+		else{
+			// TODO problem logging in alert
+		}
 	}
 
 	//-----------------------------------------------
