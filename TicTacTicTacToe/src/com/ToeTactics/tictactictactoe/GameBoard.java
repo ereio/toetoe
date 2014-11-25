@@ -62,7 +62,7 @@ public class GameBoard extends Activity{
 	public String userID = "";
 	
 	// current game object
-	TGame current_game;
+	public TGame current_game;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

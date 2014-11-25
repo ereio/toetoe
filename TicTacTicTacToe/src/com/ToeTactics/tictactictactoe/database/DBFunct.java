@@ -3,10 +3,8 @@ package com.ToeTactics.tictactictactoe.database;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -58,6 +56,7 @@ public class DBFunct {
 		if(!isGame(getUser().facebook_id, opponent.facebook_id)
 				&& !isGame(opponent.facebook_id, getUser().facebook_id)){
 			try{
+				// Initialize a new game
 				TGame game = new TGame();
 				game.board = new JSONArray(EMPTY_JSON_BOARD);
 				game.current_player_id = getUser().facebook_id;
@@ -66,7 +65,12 @@ public class DBFunct {
 				game.player1.x_or_o = 'X';
 				opponent.x_or_o = 'O';
 				game.player2 = opponent;
-				TGameToParseObject(game).save();
+				
+				ParseObject p_game = TGameToParseObject(game);
+				p_game.saveInBackground();
+				
+				//save object id
+				game.obj_id = p_game.getObjectId();
 				
 				return game;
 			} catch(Exception e){
@@ -129,6 +133,24 @@ public class DBFunct {
 			Log.e(TAG,e.toString());
 			return null;
 		}
+	}
+	
+	//-------------------------------------------------------------------
+	// Updates the given game in the database
+	//-------------------------------------------------------------------
+	public static boolean updateGame(TGame game){
+		ParseObject p_game = findGameByPlayers(game.player1, game.player2);
+		if(p_game == null){
+			p_game = findGameByPlayers(game.player2, game.player1);
+		}
+		
+		if(p_game != null){
+			
+			
+			return true;
+		}
+		else 
+			return false;
 	}
 	
 	//-----------------------------------------------------
@@ -200,6 +222,8 @@ public class DBFunct {
 
 			game_obj.current_player_id = p_obj.getString("current_player");
 			game_obj.board = p_obj.getJSONArray("board");
+			
+			game_obj.obj_id = p_obj.getObjectId();
 		} catch(Exception e){
 			game_obj = null;
 			Log.e(TAG, e.toString());

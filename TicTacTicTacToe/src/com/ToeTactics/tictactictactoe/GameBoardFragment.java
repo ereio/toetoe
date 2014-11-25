@@ -1,11 +1,10 @@
 package com.ToeTactics.tictactictactoe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
-import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
+import com.ToeTactics.tictactictactoe.database.DBFunct;
+//import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -26,13 +25,18 @@ public class GameBoardFragment extends Fragment {
 
 	// Game board
 	public Board board = new Board();
-		
+
+	//-----------------------------------------------------------------------------------
+	// onCreateView
+	//-----------------------------------------------------------------------------------
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
-	public JSONObject getBoardAsJSON(){
-		JSONObject game = new JSONObject();
+	//--------------------------------------------------------------
+	// Get current board as a JSONArray
+	//--------------------------------------------------------------
+	public JSONArray getBoardAsJSON(){
 		JSONArray JSONboard = new JSONArray();
 		
 		try{
@@ -43,7 +47,8 @@ public class GameBoardFragment extends Fragment {
 					for(int k = 0; k < 3; k++){
 						JSONArray inner_row = new JSONArray();
 						for(int l = 0; l < 3; l++){
-							inner_row.put(l, "" + board.outer_board[i][j].getSpace(k, l));
+							inner_row.put(l, "" + board.outer_board[i][j]
+										  				.getSpace(k, l));
 						}
 						inner_col.put(k, inner_row);
 					}
@@ -51,38 +56,17 @@ public class GameBoardFragment extends Fragment {
 				}
 				JSONboard.put(i, outer_row);
 			}
-			
-			game.put("board", JSONboard);
-			game.put("cur_player", "" + board.current_player);
 		} catch(Exception e){
 			Log.e("GameBoardFragment", e.toString());
 			// TODO alert: error
 		}
 		
-		return game;
+		return JSONboard;
 	}
-	/*
-	public void init(String user_name, String board_JSON){
-		username = user_name;
-		
-		if(!board_JSON.equals("")){
-			try {
-				JSONObject game_obj = new JSONObject(board_JSON);
-				if(game_obj.getJSONObject("current-player").getString("username").equals(username)){
-					x_or_o = game_obj.getJSONObject("current-player").getString("value").charAt(0);
-				}
-				else{
-					x_or_o = game_obj.getJSONObject("next-player").getString("value").charAt(0);
-				}
-				
-				initBoard(board_JSON);
-				
-			} catch (JSONException e) {
-				Log.e("GameBoardFragment",e.toString());
-			}
-		}
-	}
-	*/
+
+	//---------------------------------------------------------
+	// Initialize board with JSONArray
+	//---------------------------------------------------------
 	public void initBoard(JSONArray JSON_board){
 		try{
 			for(int i = 0; i < 3; i++){
@@ -119,35 +103,22 @@ public class GameBoardFragment extends Fragment {
 		}
 	}
 	
+	//----------------------------------------------------------------------
+	// Make a move at the provided coordinates
+	//----------------------------------------------------------------------
 	private boolean move(int i, int j, int k, int l){
 		if(board.makeMove(i, j, k, l)){
-			//mark last player since that's who made the move
+			// Note: current_player is now the next player
+
+			// Update board UI
 			if(board.current_player == Board.O_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
-				/*
-				JSONObject JSONgameObj = getBoardAsJSON();
-				try{
-					JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-				} catch(Exception e){
-					Log.e("GameBoardFrag",e.toString());
-				}
-				((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
-				*/
 			}
 			if(board.current_player == Board.X_TILE){
 				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
-				/*
-				JSONObject JSONgameObj = getBoardAsJSON();
-				try{
-					JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-				} catch(Exception e){
-					Log.e("GameBoardFrag",e.toString());
-				}
-				((GameBoard)getActivity()).sendBoard(getBoardAsJSON().toString());
-				*/
 			}
 			
-			//check for subgame winner
+			// Check for subgame winners
 			if(board.outer_board[i][j].getWinner() == Board.X_TILE){
 				for(int c1 = 0; c1 < 3; c1++){
 					for(int c2 = 0; c2 < 3; c2++){
@@ -167,16 +138,6 @@ public class GameBoardFragment extends Fragment {
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
 			
-			//add last_player_move_id and send board
-			JSONObject JSONgameObj = getBoardAsJSON();
-			try{
-				JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-			} catch(Exception e){
-				Log.e("GameBoardFrag",e.toString());
-			}
-			//((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
-			//lastMoveUserID = ((GameBoard) getActivity()).userID;
-			
 			//check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
 				// TODO alert dialog
@@ -187,12 +148,20 @@ public class GameBoardFragment extends Fragment {
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
-		//player can't make 2 moves in a row
-		//if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
+		if(((GameBoard) getActivity()).current_game.current_player_id 
+				== DBFunct.getUser().facebook_id){
 			if(move(i ,j ,k ,l)){
-				//lastMoveUserID = ((GameBoard) getActivity()).userID;
+				// Update current game
+				((GameBoard) getActivity()).current_game.board = getBoardAsJSON();
+				((GameBoard) getActivity()).current_game.SwapPlayers();
+				
+				// Update database
+				DBFunct.updateGame(((GameBoard) getActivity()).current_game);
+				
+				// Send push notification
+				//push
 			}
-		//}
+		}
 	}
 	
 	@Override
