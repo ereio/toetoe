@@ -10,16 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.database.DBFunct;
-//import com.facebook.Request;
-//import com.facebook.Response;
-//import com.facebook.Session;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
-//import com.facebook.model.GraphUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,7 +32,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-//import android.widget.ImageView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
@@ -58,8 +53,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	//login UI
 	Button bLogin;
 	EditText eUsername;
-	EditText ePassword;
-	//String usr; // stores facebook name 
+	EditText ePassword; 
 	
 	//user data
 	String nameEntry;
@@ -77,7 +71,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			finish();
 		}
 		
-		//fb setup
+		// fb setup
 		APP_ID = getString(R.string.app_id);
 		fb = new Facebook(APP_ID);
 		mAsyncRunner = new AsyncFacebookRunner(fb);
@@ -99,7 +93,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		fbButton = (Button)findViewById(R.id.authButton);
 		fbButton.setOnClickListener(this);
-		//end fb setup
+		// end fb setup
 		
 		ui_init();
 		

@@ -4,7 +4,7 @@ import org.json.JSONArray;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
-//import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
+
 
 import android.app.Fragment;
 import android.os.Bundle;

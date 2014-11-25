@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
-//import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -186,7 +185,7 @@ public class GameBoard extends Activity{
 	//-------------------------------------------------------------------------
 	private void InitGame(){
 		try {
-			current_game = new TGame();
+			current_game = new TGame(LOCAL_GAME);
 			current_game.player1 = DBFunct.getUser();
 			current_game.player2 = DBFunct.getUser();
 			current_game.current_player_id = current_game.player1.facebook_id;

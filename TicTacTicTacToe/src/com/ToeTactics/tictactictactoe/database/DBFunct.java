@@ -57,7 +57,7 @@ public class DBFunct {
 				&& !isGame(opponent.facebook_id, getUser().facebook_id)){
 			try{
 				// Initialize a new game
-				TGame game = new TGame();
+				TGame game = new TGame("");
 				game.board = new JSONArray(EMPTY_JSON_BOARD);
 				game.current_player_id = getUser().facebook_id;
 				game.player1 = new TPlayer(getUser().facebook_id,
@@ -206,7 +206,7 @@ public class DBFunct {
 	//===============================================================
 	
 	public static TGame ParseObjectToTGame(ParseObject p_obj){
-		TGame game_obj = new TGame();
+		TGame game_obj = new TGame(p_obj.getObjectId());
 		try{
 			ParseQuery<ParseUser> p1_query = ParseUser.getQuery();
 			p1_query.whereEqualTo("facebook_id", p_obj.getString("player1_fb_id"));

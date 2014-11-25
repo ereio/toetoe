@@ -12,19 +12,22 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ToeTactics.tictactictactoe.DBClient.Client;
-import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
-
 public class ChatFragment extends Fragment{
+	// Log tag
+	public static final String TAG = "ChatFragment";
 	
+	// Views
 	Button send;
 	TextView text;
 	LinearLayout layout;
 	EditText message;
 	
-
+	// Context for ???
 	Context fContext = null;
+	
+	// username for ???
 	String userName = null;
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,22 +42,31 @@ public class ChatFragment extends Fragment{
 		
 	}
 	
+	//-------------------------------------------------------
+	// Initialize the fragment UI
+	//-------------------------------------------------------
 	public void init(){
 		userName = "Testing";
+
+		// Get handle on views
+		message = (EditText) getView().findViewById(R.id.message);
+		layout = (LinearLayout) getView().findViewById(R.id.container);
 		send = (Button) getView().findViewById(R.id.send);
+
+		// Set onClick
 		send.setOnClickListener(new OnClickListener() {
 		
 			@Override
 			public void onClick(View v) {
-				String m = message.getText().toString();
+				//String m = message.getText().toString();
 				//((GameBoard)getActivity()).sendMessage(m);
-				
 			}
 		});
-		message = (EditText) getView().findViewById(R.id.message);
-		layout = (LinearLayout) getView().findViewById(R.id.container);
 	}
-	
+
+	//-------------------------------------------
+	// Add a message to the log
+	//-------------------------------------------
 	public void setMessage(String message){
 		TextView t = new TextView(getActivity());
 		message.trim();

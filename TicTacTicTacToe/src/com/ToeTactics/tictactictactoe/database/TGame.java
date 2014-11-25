@@ -9,6 +9,10 @@ public class TGame {
 	public String current_player_id;
 	public JSONArray board;
 	
+	public TGame(String objectId){
+		obj_id = objectId;
+	}
+	
 	public void SwapPlayers(){
 		if(current_player_id == player1.facebook_id)
 			current_player_id = player2.facebook_id;
