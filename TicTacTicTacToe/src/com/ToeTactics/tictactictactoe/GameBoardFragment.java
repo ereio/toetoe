@@ -90,7 +90,6 @@ public class GameBoardFragment extends Fragment {
 	public void initBoard(String JSON_board){
 		if(!JSON_board.equals("")){
 			try {
-				// must incapculate with {} with string conversions
 				JSONObject game_obj = new JSONObject(JSON_board);
 				
 				for(int i = 0; i < 3; i++){

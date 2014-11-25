@@ -67,10 +67,9 @@ public class GameBoard extends Activity{
 					ArrayList<String> tempPlayers = new ArrayList<String> ();
 		
 					for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
-						/*Log.i(TAG,friendListObj.getJSONArray("data")
-												.getJSONObject(i)
-												.getString("name"));
-						*/
+						Log.i(TAG,friendListObj.getJSONArray("data")
+												.getJSONObject(i).toString());
+						
 						tempPlayers.add(friendListObj.getJSONArray("data")
 													.getJSONObject(i)
 													.getString("name"));
@@ -82,6 +81,10 @@ public class GameBoard extends Activity{
 					}
 					
 					players = tempPlayersArray;
+					
+					
+					
+					//player_id = temPlayersArray;
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
