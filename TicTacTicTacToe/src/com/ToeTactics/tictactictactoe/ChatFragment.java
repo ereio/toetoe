@@ -47,7 +47,7 @@ public class ChatFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				String m = message.getText().toString();
-				((GameBoard)getActivity()).sendMessage(m);
+				//((GameBoard)getActivity()).sendMessage(m);
 				
 			}
 		});

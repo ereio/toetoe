@@ -49,11 +49,11 @@ public class DBFunct {
 		//PushService.setDefaultPushCallback(this, YourActivity.class);
 	}
 	
-	////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	// start game with opponent
 	// returns current game if game already exists
 	// null if error
-	////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	public static TGame startGame(TPlayer opponent){
 		if(!isGame(getUser().facebook_id, opponent.facebook_id)
 				&& !isGame(opponent.facebook_id, getUser().facebook_id)){
@@ -61,10 +61,10 @@ public class DBFunct {
 				TGame game = new TGame();
 				game.board = new JSONArray(EMPTY_JSON_BOARD);
 				game.current_player_id = getUser().facebook_id;
-				game.player1 = new TPlayer(getUser().user_id,
-										getUser().facebook_id,
-										getUser().name);
+				game.player1 = new TPlayer(getUser().facebook_id,
+											getUser().name);
 				game.player1.x_or_o = 'X';
+				opponent.x_or_o = 'O';
 				game.player2 = opponent;
 				TGameToParseObject(game).save();
 				
@@ -85,7 +85,7 @@ public class DBFunct {
 		}
 	}
 	
-	/////////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	// checks if game instance exists
 	// using player1 and player2
 	//
@@ -93,7 +93,7 @@ public class DBFunct {
 	//   has started a game with player2.
 	//   Run twice with parameters switched
 	//   to check if a game between the 2 players exists
-	/////////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	public static boolean isGame(String player1_fb_id, String player2_fb_id){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
 		query.whereEqualTo("player1_fb_id", player1_fb_id);
@@ -111,9 +111,9 @@ public class DBFunct {
 		}
 	}
 	
-	//
-	// 
-	//
+	//------------------------------------------------------------------
+	// Finds ParseObject of game between player 1 and player 2
+	//------------------------------------------------------------------
 	public static ParseObject findGameByPlayers(TPlayer p1, TPlayer p2){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
 		query.whereEqualTo("player1_fb_id", p1.facebook_id);
@@ -131,11 +131,11 @@ public class DBFunct {
 		}
 	}
 	
-	///////////////////////////////////////
+	//-----------------------------------------------------
 	// creates a user
 	// call if user not already logged in
 	// use fb credentials
-	///////////////////////////////////////
+	//-----------------------------------------------------
 	public static boolean createUser(String fb_id, String username, String password, String email){
 		ParseUser user = new ParseUser();
 		user.setUsername(username);
@@ -153,10 +153,10 @@ public class DBFunct {
 		}
 	}
 	
-	///////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	// sign user in
 	// use facebook credentials
-	///////////////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	public static boolean signIn(String username, String password){
 		try {
 			ParseUser.logIn(username,password);
@@ -167,14 +167,13 @@ public class DBFunct {
 		}
 	}
 	
-	///////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	// returns TPlayer instance of current user
-	///////////////////////////////////////////////////////
+	//-----------------------------------------------------
 	public static TPlayer getUser(){
 		ParseUser p_usr = ParseUser.getCurrentUser();
 		
-		return new TPlayer(p_usr.getObjectId(),
-							p_usr.getString("facebook_id"),
+		return new TPlayer(p_usr.getString("facebook_id"),
 							p_usr.getUsername());
 	}
 	
@@ -225,7 +224,6 @@ public class DBFunct {
 	public static TPlayer ParseUserToTPlayer(ParseUser p_user){
 		TPlayer player_obj = new TPlayer();
 		
-		player_obj.user_id = p_user.getObjectId();
 		player_obj.facebook_id = p_user.getString("facebook_id");
 		player_obj.name = p_user.getUsername();
 		

@@ -3,8 +3,8 @@ package com.ToeTactics.tictactictactoe.database;
 import org.json.JSONArray;
 
 public class TGame {
-	TPlayer player1;
-	TPlayer player2;
-	String current_player_id;
-	JSONArray board;
+	public TPlayer player1;
+	public TPlayer player2;
+	public String current_player_id;
+	public JSONArray board;
 }

@@ -17,22 +17,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class GameBoardFragment extends Fragment {
+	// Log tag
+	public static final String TAG = "GameBoardFragment";
 
+	// Board of ImageViews
 	public ImageView[][][][] spaces = new ImageView[3][3][3][3];
 	public ImageView[][] sub_winners = new ImageView[3][3];
-	
+
+	// Game board
 	public Board board = new Board();
-	//public char x_or_o;
-	//public String username;
-	private String lastMoveUserID = "-1";
-	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
-		if(state != null){
-			//Bundle bundle = getArguments();
-			//String currentMoves = bundle.getString(GameBoard.BOARDKEY);
-			//initBoard(currentMoves);
-		}
 		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
@@ -61,6 +56,7 @@ public class GameBoardFragment extends Fragment {
 			game.put("cur_player", "" + board.current_player);
 		} catch(Exception e){
 			Log.e("GameBoardFragment", e.toString());
+			// TODO alert: error
 		}
 		
 		return game;
@@ -87,47 +83,39 @@ public class GameBoardFragment extends Fragment {
 		}
 	}
 	*/
-	public void initBoard(String JSON_board){
-		if(!JSON_board.equals("")){
-			try {
-				JSONObject game_obj = new JSONObject(JSON_board);
-				
-				for(int i = 0; i < 3; i++){
-					for(int j = 0; j < 3; j++){
-						for(int k = 0; k < 3; k++){
-							for(int l = 0; l < 3; l++){
-								if(game_obj.getJSONArray("board")
-										.getJSONArray(i)
-										.getJSONArray(j)
-										.getJSONArray(k)
-										.getString(l)
-										.charAt(0) != Board.BLANK_TILE)
-								{
-									board.current_player =
-										game_obj.getJSONArray("board")
-												.getJSONArray(i)
-												.getJSONArray(j)
-												.getJSONArray(k)
-												.getString(l)
-												.charAt(0);
-									move(i,j,k,l);
-								}
+	public void initBoard(JSONArray JSON_board){
+		try{
+			for(int i = 0; i < 3; i++){
+				for(int j = 0; j < 3; j++){
+					for(int k = 0; k < 3; k++){
+						for(int l = 0; l < 3; l++){
+							if(JSON_board
+								.getJSONArray(i)
+								.getJSONArray(j)
+								.getJSONArray(k)
+								.getString(l)
+								.charAt(0) != Board.BLANK_TILE)
+							{
+								board.current_player =
+								JSON_board
+									.getJSONArray(i)
+									.getJSONArray(j)
+									.getJSONArray(k)
+									.getString(l)
+									.charAt(0);
+								move(i,j,k,l);
 							}
 						}
 					}
 				}
-				
-				board.current_player = game_obj.getString("cur_player").charAt(0);
-				
-				lastMoveUserID = game_obj.getString("last_move_user_id");
-				
-				//check for winner
-				if(board.getWinner() != Board.BLANK_TILE){
-					// TODO alert dialog
-				}
-			} catch (JSONException e) {
-				Log.e("GameBoardFragment",e.toString());
 			}
+				
+			//check for winner
+			if(board.getWinner() != Board.BLANK_TILE){
+				// TODO game end alert dialog
+			}
+		} catch(Exception e){
+			Log.e(TAG, e.toString());
 		}
 	}
 	
@@ -186,7 +174,7 @@ public class GameBoardFragment extends Fragment {
 			} catch(Exception e){
 				Log.e("GameBoardFrag",e.toString());
 			}
-			((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
+			//((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
 			//lastMoveUserID = ((GameBoard) getActivity()).userID;
 			
 			//check for winner
@@ -202,7 +190,7 @@ public class GameBoardFragment extends Fragment {
 		//player can't make 2 moves in a row
 		//if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
 			if(move(i ,j ,k ,l)){
-				lastMoveUserID = ((GameBoard) getActivity()).userID;
+				//lastMoveUserID = ((GameBoard) getActivity()).userID;
 			}
 		//}
 	}
@@ -210,6 +198,11 @@ public class GameBoardFragment extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
+		
+		//-------------------------------------------------------------------------
+		// Get handle on image views
+		//-------------------------------------------------------------------------
+		
 		//Board Coordinates Reference
 		//        0         1         2
 		//     0  1  2   0  1  2   0  1  2
@@ -332,8 +325,9 @@ public class GameBoardFragment extends Fragment {
 		spaces[2][2][2][1] = (ImageView) getActivity().findViewById(R.id.space87);
 		spaces[2][2][2][2] = (ImageView) getActivity().findViewById(R.id.space88);
 		
-		//Log.i("GameBoardFragment", "setting listeners");
-		//set on click listeners
+		//----------------------------------------------------------
+		// Set onClick listeners
+		//----------------------------------------------------------
 		spaces[0][0][0][0].setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				makeMove(0,0,0,0);

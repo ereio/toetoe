@@ -2,10 +2,14 @@ package com.ToeTactics.tictactictactoe;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
+import com.ToeTactics.tictactictactoe.database.DBFunct;
+import com.ToeTactics.tictactictactoe.database.TGame;
+import com.ToeTactics.tictactictactoe.database.TPlayer;
+//import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -27,88 +31,62 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 public class GameBoard extends Activity{
+	// JSON keys
 	public static final String BOARDKEY = "BoardKey";
+	
+	// no game error identifier
 	public static final String NOGAME = "NoGame";
+	
+	// Log tag
 	public static final String TAG = "GameBoard";
+	
+	// ID for local game
+	public static final String LOCAL_GAME = "Local Game";
+	
+	// view handles
 	private DrawerLayout mDrawerLayout;
 	private Fragment fChat;
 	private Fragment fBoard;
 	private ListView playerList;
 	private FrameLayout mChat;
-	private FrameLayout mBoard;
-	private ToeClient client;
+	//private FrameLayout mBoard;
 	private ActionBarDrawerToggle mDrawerToggle;
 	
-	private String[] players = {"Joe", "Sally", "Bob"};
-	private String username = "DefaultName";
-	public String userID = "0";
+	// NIO vars
+	//private ToeClient client;
+	
+	// user vars
+	private String[] players = {LOCAL_GAME};
+	private String[] player_ids = {LOCAL_GAME};
+	private String username = "";
+	public String userID = "";
+	
+	// current game object
+	TGame current_game;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_game);
 		
-		if(getIntent().getExtras() != null){
-			//Log.i(TAG, getIntent().getExtras().getString(MainActivity.FRIENDS));
-			
-			if(getIntent().getExtras().getString(MainActivity.USER) != null){
-				username = getIntent().getExtras().getString(MainActivity.USER);
-			}
-			if(getIntent().getExtras().getString(MainActivity.USERIDKEY) != null){
-				userID = getIntent().getExtras().getString(MainActivity.USERIDKEY);
-			}
-			try {
-				if(getIntent().getExtras().getString(MainActivity.FRIENDS) != null){
-					JSONObject friendListObj = new JSONObject("{\"data\":"+getIntent()
-																.getExtras()
-																.getString(MainActivity.FRIENDS)+"}");
-				
+		InitUserVars();
 		
-					ArrayList<String> tempPlayers = new ArrayList<String> ();
-		
-					for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
-						Log.i(TAG,friendListObj.getJSONArray("data")
-												.getJSONObject(i).toString());
-						
-						tempPlayers.add(friendListObj.getJSONArray("data")
-													.getJSONObject(i)
-													.getString("name"));
-					}
-					
-					String[] tempPlayersArray = new String[tempPlayers.size()];
-					for(int i = 0; i < tempPlayers.size(); i++){
-						tempPlayersArray[i] = (String) tempPlayers.get(i);
-					}
-					
-					players = tempPlayersArray;
-					
-					
-					
-					//player_id = temPlayersArray;
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		InitGame();
 		
 		// Init UI Components and Links with client
 		ui_init();
 		
 		// Starts client
-		client = new ToeClient(this);
-		Thread t = new Thread(client);
-		t.start();
+		//client = new ToeClient(this);
+		//Thread t = new Thread(client);
+		//t.start();
 
 		if(savedInstanceState != null){
 		//	SwitchPlayerBoard(NOGAME);
 		}
-		Log.i(TAG, "Passing onCreate");
+		//Log.i(TAG, "Passing onCreate");
 	}
 	
-	
-	// User Interface Initialization
-	//--------------------------------------------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -148,64 +126,142 @@ public class GameBoard extends Activity{
 		}
 	}
 	
+	//----------------------------------------------------------------------------
+	// Initialize user variables
+	//----------------------------------------------------------------------------
+	private void InitUserVars(){
+		if(getIntent().getExtras() != null){
+			if(getIntent().getExtras().getString(MainActivity.USER) != null){
+				username = getIntent().getExtras().getString(MainActivity.USER);
+			}
+			if(getIntent().getExtras().getString(MainActivity.USERIDKEY) != null){
+				userID = getIntent().getExtras().getString(MainActivity.USERIDKEY);
+			}
+			try {
+				if(getIntent().getExtras().getString(MainActivity.FRIENDS) != null){
+					JSONObject friendListObj = new JSONObject("{\"data\":"+getIntent()
+																.getExtras()
+																.getString(MainActivity.FRIENDS)+"}");
+				
+					// Put player names in an ArrayList
+					ArrayList<String> tempPlayers = new ArrayList<String> ();
+					for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
+						Log.i(TAG,friendListObj.getJSONArray("data")
+												.getJSONObject(i).toString());
+						
+						tempPlayers.add(friendListObj.getJSONArray("data")
+													 .getJSONObject(i)
+													 .getString("name"));
+					}
+
+					// Set local game option
+					players[0] = LOCAL_GAME;
+					player_ids[0] = LOCAL_GAME;
+					
+					// Resize players array
+					players = new String[tempPlayers.size()+1];
+					// Populate players array with player names
+					for(int i = 1; i < players.length; i++){
+						players[i] = (String) tempPlayers.get(i);
+					}
+					
+					// Resize player_ids array
+					player_ids = new String[players.length];
+					// Populate player_ids array with fb ids
+					for(int i = 1; i < player_ids.length; i++){
+						player_ids[i] = friendListObj.getJSONArray("data")
+													 .getJSONObject(i)
+													 .getString("id");
+					}
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	//-------------------------------------------------------------------------
+	// Creates local game from onCreate
+	//-------------------------------------------------------------------------
+	private void InitGame(){
+		try {
+			current_game = new TGame();
+			current_game.player1 = DBFunct.getUser();
+			current_game.player2 = DBFunct.getUser();
+			current_game.current_player_id = current_game.player1.facebook_id;
+			current_game.board = new JSONArray(DBFunct.EMPTY_JSON_BOARD);
+		} catch (Exception e) {
+			Log.e(TAG, e.toString());
+			// TODO alert: error initializing game
+		}
+	}
+	
+	//-------------------------------------------------------------------------
+	// Player List onClick
+	//-------------------------------------------------------------------------
 	private class PlayerClickListener implements ListView.OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-				SwitchPlayerBoard(players[position]);
+				SwitchPlayerBoard(position);
 				playerList.setItemChecked(position, true);
 				// update a text view of the current player on screen
 				mDrawerLayout.closeDrawers();
 		}
 	}
 	
-	private void SwitchPlayerBoard(String player){
-		// must query for board moves related to a player
-		// if none, it will need to create a new game instance
+	//-------------------------------------------------------------------------
+	// Change Opponent
+	//-------------------------------------------------------------------------
+	private void SwitchPlayerBoard(int player){
+		Fragment fNewBoard = new GameBoardFragment();
+
+		// Replace GameBoardFragment instance
+		FragmentManager fManager = getFragmentManager();
+		FragmentTransaction fTrans = fManager.beginTransaction();
+		fTrans.replace(R.id.game_display, fNewBoard);
+		fTrans.commit();
 		
-		// POTENTIALLY OBSOLTE, Might just need to call sendPlayerPlayRequest() 
-		String JSON_board = "";
-		
-		if(player != NOGAME){
-			// will rerender the correct board for the players involved
-			Fragment fNewBoard = new GameBoardFragment();
-			Bundle boardArgs = new Bundle();
-			boardArgs.putString(BOARDKEY, JSON_board);
-			
-			FragmentManager fManager = getFragmentManager();
-			FragmentTransaction fTrans = fManager.beginTransaction();
-			fTrans.replace(R.id.game_display, fNewBoard);
-			fTrans.commit();
+		if(players[player] != NOGAME && players[player] != LOCAL_GAME){
+			// Get game from database
+			current_game = 
+				DBFunct.startGame(new TPlayer(player_ids[player], players[player]));
+
+			// Initialize board
+			((GameBoardFragment) fNewBoard).initBoard(current_game.board);
 		}
 		else{
-			JSON_board = "";
+			// Start local game
+			InitGame();
 		}
-
-		
 	}
 	
-	/*
+	//--------------------------------------------------
 	// Initalization of the main UI data and processes
-	*/
+	//--------------------------------------------------
 	private void ui_init(){
-		
 		frag_init();
+		
+		// Get handle on drawers
 		mChat = (FrameLayout) findViewById(R.id.right_chat);
-		mBoard = (FrameLayout) findViewById(R.id.game_display);
+		//mBoard = (FrameLayout) findViewById(R.id.game_display);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		playerList = (ListView) findViewById(R.id.left_nav);
 		
+		// Stylize drawers
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
 		// Try the Drawer Toggle Settings Creation
 		try{	
-		mDrawerToggle = 
-		new CustomDrawerToggle(this, mDrawerLayout, R.string.Open, R.string.Closed);
-		
+			mDrawerToggle = 
+				new CustomDrawerToggle(this, mDrawerLayout, R.string.Open, R.string.Closed);
+
 		}catch(RuntimeException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.toString());
 		}
+		
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		//Sets ActionBar App Icon to essentially clear opened drawers
@@ -218,6 +274,9 @@ public class GameBoard extends Activity{
 		
 	}
 	
+	//-----------------------------------------------------------
+	// Initialize 
+	//-----------------------------------------------------------
 	private void frag_init(){
 		fBoard = new GameBoardFragment();
 		fChat = new ChatFragment();
@@ -228,9 +287,9 @@ public class GameBoard extends Activity{
 		fTrans.commit();
 	}
 
-	// FUNCTIONS FOR CLIENT / ACTIVTY NIO
 	// --------------------------------------------------------
-	
+	// FUNCTIONS FOR CLIENT / ACTIVTY NIO
+	/*
 	public void sendMessage(String message){
 		client.outgoingMessage(message, username);
 	}
@@ -261,25 +320,30 @@ public class GameBoard extends Activity{
 		
 		
 	}
+	*/
 	// END FUNCTIONS FOR CLIENT / ACTIVITY NIO
 	// --------------------------------------------------------
 	
+	//-----------------------------------------------------
 	// Used to sync the Drawer state 
+	//-----------------------------------------------------
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState){
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
 	}
-	// used to pass config changes to Drawer Toggle
+	//----------------------------------------------------------
+	// Used to pass config changes to Drawer Toggle
+	//----------------------------------------------------------
 	@Override
 	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	
-	/*
+	//--------------------------------------------------------------
 	// Class for creation of toggle for Drawer events
-	*/
+	//--------------------------------------------------------------
 	private class CustomDrawerToggle extends ActionBarDrawerToggle {
 
 		public CustomDrawerToggle(Activity activity, DrawerLayout drawerLayout,
