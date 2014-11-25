@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	//login UI
 	Button bLogin;
+	Button bChangePassword;
 	EditText eUsername;
 	EditText ePassword; 
 	
@@ -123,11 +124,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	//--------------------------------------------------
 	private void ui_init(){
 		bLogin = (Button) findViewById(R.id.LoginButton);
+		bChangePassword = (Button) findViewById(R.id.ChangePassButton);
 		eUsername = (EditText) findViewById(R.id.UsernameEntry);
 		ePassword = (EditText) findViewById(R.id.PasswordEntry);
 		
 		//Saved for planned login option
 		bLogin.setVisibility(View.GONE);
+		bChangePassword.setVisibility(View.GONE);
 		ePassword.setVisibility(View.GONE);
 		eUsername.setVisibility(View.GONE);
 		
@@ -312,6 +315,11 @@ public class MainActivity extends Activity implements OnClickListener {
 							// TODO failed login alert
 						}
 						else{
+							StartGame();
+						}
+					}
+					else{
+						if(DBFunct.getUser() != null){
 							StartGame();
 						}
 					}

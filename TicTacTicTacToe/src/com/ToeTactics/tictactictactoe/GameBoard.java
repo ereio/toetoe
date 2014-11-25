@@ -152,16 +152,12 @@ public class GameBoard extends Activity{
 													 .getJSONObject(i)
 													 .getString("name"));
 					}
-
-					// Set local game option
-					players[0] = LOCAL_GAME;
-					player_ids[0] = LOCAL_GAME;
 					
 					// Resize players array
 					players = new String[tempPlayers.size()+1];
 					// Populate players array with player names
 					for(int i = 1; i < players.length; i++){
-						players[i] = (String) tempPlayers.get(i);
+						players[i] = (String) tempPlayers.get(i-1);
 					}
 					
 					// Resize player_ids array
@@ -172,6 +168,10 @@ public class GameBoard extends Activity{
 													 .getJSONObject(i)
 													 .getString("id");
 					}
+					
+					// Set local game option
+					players[0] = LOCAL_GAME;
+					player_ids[0] = LOCAL_GAME;
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -229,7 +229,8 @@ public class GameBoard extends Activity{
 				DBFunct.startGame(new TPlayer(player_ids[player], players[player]));
 
 			// Initialize board
-			((GameBoardFragment) fNewBoard).initBoard(current_game.board);
+			((GameBoardFragment) getFragmentManager().findFragmentById(R.id.game_display))
+				.initBoard(current_game.board);
 		}
 		else{
 			// Start local game

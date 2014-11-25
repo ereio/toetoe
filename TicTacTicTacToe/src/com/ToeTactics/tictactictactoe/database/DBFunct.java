@@ -53,8 +53,14 @@ public class DBFunct {
 	// null if error
 	//-----------------------------------------------------
 	public static TGame startGame(TPlayer opponent){
-		if(!isGame(getUser().facebook_id, opponent.facebook_id)
-				&& !isGame(opponent.facebook_id, getUser().facebook_id)){
+		// Try to find the game
+		ParseObject game_pobj = findGameByPlayers(getUser(), opponent);
+		if(game_pobj == null){
+			game_pobj = findGameByPlayers(opponent, getUser());
+		}
+		
+		// Start a new game or return the current game
+		if(game_pobj == null){
 			try{
 				// Initialize a new game
 				TGame game = new TGame("");
@@ -79,12 +85,6 @@ public class DBFunct {
 			}
 		}
 		else {
-			ParseObject game_pobj = findGameByPlayers(getUser(), opponent);
-			if(game_pobj == null){
-				game_pobj = findGameByPlayers(opponent, getUser());
-				if(game_pobj == null)
-					return null;
-			}
 			return ParseObjectToTGame(game_pobj);
 		}
 	}
@@ -117,6 +117,7 @@ public class DBFunct {
 	
 	//------------------------------------------------------------------
 	// Finds ParseObject of game between player 1 and player 2
+	// Note: run twice with parameters switched if null on first run
 	//------------------------------------------------------------------
 	public static ParseObject findGameByPlayers(TPlayer p1, TPlayer p2){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
@@ -194,9 +195,13 @@ public class DBFunct {
 	//-----------------------------------------------------
 	public static TPlayer getUser(){
 		ParseUser p_usr = ParseUser.getCurrentUser();
-		
-		return new TPlayer(p_usr.getString("facebook_id"),
+		if(p_usr != null){
+			return new TPlayer(p_usr.getString("facebook_id"),
 							p_usr.getUsername());
+		}
+		else{
+			return null;
+		}
 	}
 	
 	//===============================================================
