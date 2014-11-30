@@ -68,7 +68,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		if(!DBFunct.initDB(getApplicationContext())){
-			// TODO db connection failed alert
+			// Let the uer know something went wrong
+			Toast.makeText(this, "An error has occured while initializing the database connection...", 
+					Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		
@@ -183,7 +185,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(success);
 		}
 		else{
-			// TODO problem logging in alert
+			// Let the uer know something went wrong
+			Toast.makeText(this, "An error has occured while logging in...", 
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
-import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -29,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GameBoard extends Activity{
 	// JSON keys
@@ -181,8 +181,7 @@ public class GameBoard extends Activity{
 					player_ids[0] = LOCAL_GAME;
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG,e.toString());
 			}
 		}
 	}
@@ -199,7 +198,9 @@ public class GameBoard extends Activity{
 			current_game.board = new JSONArray(DBFunct.EMPTY_JSON_BOARD);
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());
-			// TODO alert: error initializing game
+			// Let the user know something went wrong
+			Toast.makeText(this, "An error has occured while initializing the game...",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -359,7 +360,6 @@ public class GameBoard extends Activity{
 				int openDrawerContentDescRes, int closeDrawerContentDescRes) {
 			super(activity, drawerLayout, openDrawerContentDescRes,
 					closeDrawerContentDescRes);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override

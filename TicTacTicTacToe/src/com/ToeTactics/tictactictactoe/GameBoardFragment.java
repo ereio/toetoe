@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class GameBoardFragment extends Fragment {
 	// Log tag
@@ -61,7 +62,7 @@ public class GameBoardFragment extends Fragment {
 			}
 		} catch(Exception e){
 			Log.e("GameBoardFragment", e.toString());
-			// TODO alert: error
+			Toast.makeText(getActivity(), "An error has occured...", Toast.LENGTH_SHORT).show();
 		}
 		
 		return JSONboard;
@@ -151,12 +152,12 @@ public class GameBoardFragment extends Fragment {
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
-		if(((GameBoard) getActivity()).current_game.current_player_id 
+		if(gbActivity.current_game.current_player_id 
 				== DBFunct.getUser().facebook_id){
 			if(move(i ,j ,k ,l)){
 				// Update current game
-				((GameBoard) getActivity()).current_game.board = getBoardAsJSON();
-				((GameBoard) getActivity()).current_game.SwapPlayers();
+				gbActivity.current_game.board = getBoardAsJSON();
+				gbActivity.current_game.SwapPlayers();
 				
 				// Update database
 				if(gbActivity.current_game.obj_id != GameBoard.LOCAL_GAME){
