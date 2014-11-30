@@ -140,18 +140,23 @@ public class DBFunct {
 	// Updates the given game in the database
 	//-------------------------------------------------------------------
 	public static boolean updateGame(TGame game){
+		// Try to find the game
 		ParseObject p_game = findGameByPlayers(game.player1, game.player2);
+		// Try again in case the players got switched
 		if(p_game == null){
 			p_game = findGameByPlayers(game.player2, game.player1);
 		}
 		
+		// Update the current game
 		if(p_game != null){
-			
+			p_game.put("board", game.board);
+			p_game.put("current_player", game.current_player_id);
 			
 			return true;
 		}
-		else 
+		else{
 			return false;
+		}
 	}
 	
 	//-----------------------------------------------------
@@ -188,6 +193,13 @@ public class DBFunct {
 			Log.e(TAG, e.toString());
 			return false;
 		}
+	}
+	
+	//----------------------------
+	// sign user out
+	//----------------------------
+	public static void signOut(){
+		ParseUser.logOut();
 	}
 	
 	//-----------------------------------------------------

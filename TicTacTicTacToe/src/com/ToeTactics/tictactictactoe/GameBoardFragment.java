@@ -18,6 +18,9 @@ import android.widget.ImageView;
 public class GameBoardFragment extends Fragment {
 	// Log tag
 	public static final String TAG = "GameBoardFragment";
+	
+	// GameBoard activity handle
+	public static GameBoard gbActivity;
 
 	// Board of ImageViews
 	public ImageView[][][][] spaces = new ImageView[3][3][3][3];
@@ -156,7 +159,9 @@ public class GameBoardFragment extends Fragment {
 				((GameBoard) getActivity()).current_game.SwapPlayers();
 				
 				// Update database
-				DBFunct.updateGame(((GameBoard) getActivity()).current_game);
+				if(gbActivity.current_game.obj_id != GameBoard.LOCAL_GAME){
+					DBFunct.updateGame(gbActivity.current_game);
+				}
 				
 				// Send push notification
 				//push
@@ -167,6 +172,9 @@ public class GameBoardFragment extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
+		
+		// Get handle on activity
+		gbActivity = (GameBoard) getActivity();
 		
 		//-------------------------------------------------------------------------
 		// Get handle on image views

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -84,6 +85,12 @@ public class GameBoard extends Activity{
 		//	SwitchPlayerBoard(NOGAME);
 		}
 		//Log.i(TAG, "Passing onCreate");
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		DBFunct.signOut();
 	}
 	
 	@Override
@@ -165,7 +172,7 @@ public class GameBoard extends Activity{
 					// Populate player_ids array with fb ids
 					for(int i = 1; i < player_ids.length; i++){
 						player_ids[i] = friendListObj.getJSONArray("data")
-													 .getJSONObject(i)
+													 .getJSONObject(i-1)
 													 .getString("id");
 					}
 					
@@ -215,6 +222,8 @@ public class GameBoard extends Activity{
 	// Change Opponent
 	//-------------------------------------------------------------------------
 	private void SwitchPlayerBoard(int player){
+		//Log.i(TAG,"Player "+player+" selected");
+		
 		Fragment fNewBoard = new GameBoardFragment();
 
 		// Replace GameBoardFragment instance
