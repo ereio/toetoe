@@ -152,8 +152,8 @@ public class GameBoard extends Activity{
 					// Put player names in an ArrayList
 					ArrayList<String> tempPlayers = new ArrayList<String> ();
 					for(int i = 0; i < friendListObj.getJSONArray("data").length(); i++){
-						Log.i(TAG,friendListObj.getJSONArray("data")
-												.getJSONObject(i).toString());
+						//Log.i(TAG,friendListObj.getJSONArray("data")
+						//						.getJSONObject(i).toString());
 						
 						tempPlayers.add(friendListObj.getJSONArray("data")
 													 .getJSONObject(i)
@@ -239,8 +239,15 @@ public class GameBoard extends Activity{
 				DBFunct.startGame(new TPlayer(player_ids[player], players[player]));
 
 			// Initialize board
-			((GameBoardFragment) getFragmentManager().findFragmentById(R.id.game_display))
-				.initBoard(current_game.board);
+			if(current_game != null){
+				((GameBoardFragment) getFragmentManager().findFragmentById(R.id.game_display))
+					.initBoard(current_game.board);
+			}
+			else{
+				// Let the uer know something went wrong
+				Toast.makeText(this, "An error has occured while creating the game...", 
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 		else{
 			// Start local game

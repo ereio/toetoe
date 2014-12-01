@@ -189,6 +189,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			Toast.makeText(this, "An error has occured while logging in...", 
 					Toast.LENGTH_SHORT).show();
 		}
+		
+		finish();
 	}
 
 	//-----------------------------------------------
@@ -253,7 +255,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onComplete(String response, Object state) {
-				Log.i("MainActivity", response);
+				//Log.i("MainActivity", response);
 				
 				try {
 					JSONObject JSONresponse = new JSONObject(response);
@@ -313,7 +315,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				try{
 					JSONObject JSONresponse = new JSONObject(response);
 					friendsList = JSONresponse.getJSONArray("data").toString();
-					Log.i("MainActivity",friendsList);
+					//Log.i("MainActivity",friendsList);
 					if(!DBFunct.createUser(userIDEntry, nameEntry, passEntry, emailEntry)){
 						if(!DBFunct.signIn(nameEntry, passEntry)){
 							// TODO failed login alert

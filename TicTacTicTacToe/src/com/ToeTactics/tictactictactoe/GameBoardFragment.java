@@ -91,19 +91,24 @@ public class GameBoardFragment extends Fragment {
 									.getJSONArray(k)
 									.getString(l)
 									.charAt(0);
-								move(i,j,k,l);
+								if(move(i,j,k,l)){
+									// Move successful
+								}
 							}
 						}
 					}
 				}
 			}
-				
-			//check for winner
+			
+			// Check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
 				// TODO game end alert dialog
 			}
 		} catch(Exception e){
 			Log.e(TAG, e.toString());
+			// Let the user know something went wrong
+			Toast.makeText(getActivity(), "An error occured while creating the game board...", 
+					Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -116,10 +121,13 @@ public class GameBoardFragment extends Fragment {
 
 			// Update board UI
 			if(board.current_player == Board.O_TILE){
-				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
+				Log.i(TAG, i+" "+j+" "+k+" "+l);
+				spaces[i][j][k][l].setImageDrawable(getResources()
+						.getDrawable(R.drawable.x_tile_w_bg));
 			}
 			if(board.current_player == Board.X_TILE){
-				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
+				spaces[i][j][k][l].setImageDrawable(getResources()
+						.getDrawable(R.drawable.o_tile_w_bg));
 			}
 			
 			// Check for subgame winners
@@ -129,7 +137,8 @@ public class GameBoardFragment extends Fragment {
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
 					}
 				}
-				sub_winners[i][j].setImageResource(R.drawable.x_tile_w_bg);
+				sub_winners[i][j].setImageDrawable(getResources()
+						.getDrawable(R.drawable.x_tile_w_bg));
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
 			if(board.outer_board[i][j].getWinner() == Board.O_TILE){
@@ -138,7 +147,8 @@ public class GameBoardFragment extends Fragment {
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
 					}
 				}
-				sub_winners[i][j].setImageResource(R.drawable.o_tile_w_bg);
+				sub_winners[i][j].setImageDrawable(getResources()
+						.getDrawable(R.drawable.o_tile_w_bg));
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
 			
@@ -153,7 +163,7 @@ public class GameBoardFragment extends Fragment {
 	
 	public void makeMove(int i, int j, int k, int l){
 		if(gbActivity.current_game.current_player_id 
-				== DBFunct.getUser().facebook_id){
+				.equals(DBFunct.getUser().facebook_id)){
 			if(move(i ,j ,k ,l)){
 				// Update current game
 				gbActivity.current_game.board = getBoardAsJSON();

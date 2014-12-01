@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.json.JSONArray;
 
+import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -68,8 +70,8 @@ public class DBFunct {
 				game.current_player_id = getUser().facebook_id;
 				game.player1 = new TPlayer(getUser().facebook_id,
 											getUser().name);
-				game.player1.x_or_o = 'X';
-				opponent.x_or_o = 'O';
+				game.player1.x_or_o = Board.X_TILE;
+				opponent.x_or_o = Board.O_TILE;
 				game.player2 = opponent;
 				
 				ParseObject p_game = TGameToParseObject(game);
@@ -152,7 +154,15 @@ public class DBFunct {
 			p_game.put("board", game.board);
 			p_game.put("current_player", game.current_player_id);
 			
-			return true;
+			try {
+				p_game.save();
+				
+				return true;
+			} catch (ParseException e) {
+				Log.e(TAG,e.toString());
+				
+				return false;
+			}
 		}
 		else{
 			return false;
@@ -255,9 +265,9 @@ public class DBFunct {
 		p_obj.put("board", game.board);
 		p_obj.put("current_player", game.current_player_id);
 		p_obj.put("player1_fb_id", game.player1.facebook_id);
-		p_obj.put("player1_x_o", game.player1.x_or_o);
+		p_obj.put("player1_x_o", Character.toString(game.player1.x_or_o));
 		p_obj.put("player2_fb_id", game.player2.facebook_id);
-		p_obj.put("player2_x_o", game.player2.x_or_o);
+		p_obj.put("player2_x_o", Character.toString(game.player2.x_or_o));
 		
 		return p_obj;
 	}
