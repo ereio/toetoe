@@ -121,7 +121,6 @@ public class GameBoardFragment extends Fragment {
 
 			// Update board UI
 			if(board.current_player == Board.O_TILE){
-				Log.i(TAG, i+" "+j+" "+k+" "+l);
 				spaces[i][j][k][l].setImageDrawable(getResources()
 						.getDrawable(R.drawable.x_tile_w_bg));
 			}
@@ -183,6 +182,8 @@ public class GameBoardFragment extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
+		
+		Log.i(TAG,"onStart");
 		
 		// Get handle on activity
 		gbActivity = (GameBoard) getActivity();
@@ -721,6 +722,14 @@ public class GameBoardFragment extends Fragment {
 				makeMove(2,2,2,2);
 			}
 		});
+		if(gbActivity.current_game != null){
+			Log.i(TAG, "initializing board");
+			initBoard(gbActivity.current_game.board);
+		}
+		else{
+			// Let the user know something went wrong
+			Toast.makeText(getActivity(), "An error has occured while creating the game...", 
+					Toast.LENGTH_SHORT).show();
+		}
 	}
-	
 }

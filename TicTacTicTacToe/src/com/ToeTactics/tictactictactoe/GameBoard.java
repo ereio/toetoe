@@ -146,8 +146,8 @@ public class GameBoard extends Activity{
 			try {
 				if(getIntent().getExtras().getString(MainActivity.FRIENDS) != null){
 					JSONObject friendListObj = new JSONObject("{\"data\":"+getIntent()
-																.getExtras()
-																.getString(MainActivity.FRIENDS)+"}");
+															.getExtras()
+															.getString(MainActivity.FRIENDS)+"}");
 				
 					// Put player names in an ArrayList
 					ArrayList<String> tempPlayers = new ArrayList<String> ();
@@ -237,17 +237,6 @@ public class GameBoard extends Activity{
 			// Get game from database
 			current_game = 
 				DBFunct.startGame(new TPlayer(player_ids[player], players[player]));
-
-			// Initialize board
-			if(current_game != null){
-				((GameBoardFragment) getFragmentManager().findFragmentById(R.id.game_display))
-					.initBoard(current_game.board);
-			}
-			else{
-				// Let the uer know something went wrong
-				Toast.makeText(this, "An error has occured while creating the game...", 
-						Toast.LENGTH_SHORT).show();
-			}
 		}
 		else{
 			// Start local game
