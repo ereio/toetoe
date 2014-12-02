@@ -19,7 +19,6 @@ public class ToePushReceiver extends ParsePushBroadcastReceiver {
 	public void onPushReceive(Context context, Intent intent){
 		intent = new Intent(context, GameBoard.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		context.startActivity(intent);
 		
 	}
