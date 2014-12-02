@@ -247,6 +247,7 @@ public class DBFunct {
 		push.setQuery(pushQuery);
 		push.setMessage(ParseUser.getCurrentUser().getUsername() + " made a move!");
 		push.sendInBackground();
+		
 		return false;
 	}
 	//===============================================================

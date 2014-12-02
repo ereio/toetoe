@@ -91,7 +91,7 @@ public class GameBoard extends Activity{
 		
 		// Associate current user with installation (device)
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-		installation.put("user",ParseUser.getCurrentUser());
+		installation.put("user", ParseUser.getCurrentUser());
 		installation.saveInBackground();
 	}
 	
@@ -221,7 +221,6 @@ public class GameBoard extends Activity{
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 				SwitchPlayerBoard(position);
-				ParsePush.subscribeInBackground(current_game.obj_id);
 				playerList.setItemChecked(position, true);
 				// update a text view of the current player on screen
 				mDrawerLayout.closeDrawers();
