@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.ToeTactics.tictactictactoe.GameBoard;
 import com.parse.ParsePushBroadcastReceiver;
 
 public class ToePushReceiver extends ParsePushBroadcastReceiver {
@@ -12,6 +13,14 @@ public class ToePushReceiver extends ParsePushBroadcastReceiver {
 	public void onReceive(Context context, Intent intent){
 		super.onReceive(context, intent);
 		
-		Toast.makeText(context.getApplicationContext(), "Push Notification Received", Toast.LENGTH_SHORT).show();
+	}
+	
+	@Override
+	public void onPushReceive(Context context, Intent intent){
+		intent = new Intent(context, GameBoard.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		context.startActivity(intent);
+		
 	}
 }

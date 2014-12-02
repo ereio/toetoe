@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
+import com.ToeTactics.tictactictactoe.database.ToePushReceiver;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
@@ -93,13 +94,32 @@ public class GameBoard extends Activity{
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 		installation.put("user", ParseUser.getCurrentUser());
 		installation.saveInBackground();
+		
+		// Adding IntentFilter
 	}
 	
+	
+	// On Destroy
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		DBFunct.signOut();
 	}
+	
+	// On Resume - BroadCast receiver
+	@Override
+	public void onResume(){
+		super.onResume();
+		
+	}
+	// On Pause  - BroadCast Receiver
+	@Override
+	public void onPause(){
+		super.onPause();
+	}
+	
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
