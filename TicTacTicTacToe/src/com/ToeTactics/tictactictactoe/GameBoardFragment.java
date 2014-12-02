@@ -171,10 +171,9 @@ public class GameBoardFragment extends Fragment {
 				// Update database
 				if(gbActivity.current_game.obj_id != GameBoard.LOCAL_GAME){
 					DBFunct.updateGame(gbActivity.current_game);
+					// Send push notification
+					DBFunct.sendGameboardPush(gbActivity.current_game);
 				}
-				
-				// Send push notification
-				//push
 			}
 		}
 	}

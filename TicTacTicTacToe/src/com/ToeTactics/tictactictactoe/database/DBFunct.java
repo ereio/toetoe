@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -226,6 +228,27 @@ public class DBFunct {
 		}
 	}
 	
+	//-----------------------------------------------------
+	// Sends a push notification for the new current player
+	// refreshes board query and notifies of update
+	//-----------------------------------------------------
+	public static boolean sendGameboardPush(TGame game){
+		ParsePush push = new ParsePush();
+		
+		// Query User table for current_player user which should now be opponent
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		userQuery.whereMatches("facebook_id", game.current_player_id);
+		
+		// Finds that users device handle for push notifications
+		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
+		pushQuery.whereMatchesQuery("user", userQuery);
+		
+		
+		push.setQuery(pushQuery);
+		push.setMessage(ParseUser.getCurrentUser().getUsername() + " made a move!");
+		push.sendInBackground();
+		return false;
+	}
 	//===============================================================
 	//
 	// conversion functions

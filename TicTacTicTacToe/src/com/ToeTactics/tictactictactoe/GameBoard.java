@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -85,6 +88,11 @@ public class GameBoard extends Activity{
 		//	SwitchPlayerBoard(NOGAME);
 		}
 		//Log.i(TAG, "Passing onCreate");
+		
+		// Associate current user with installation (device)
+		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+		installation.put("user",ParseUser.getCurrentUser());
+		installation.saveInBackground();
 	}
 	
 	@Override
@@ -213,6 +221,7 @@ public class GameBoard extends Activity{
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 				SwitchPlayerBoard(position);
+				ParsePush.subscribeInBackground(current_game.obj_id);
 				playerList.setItemChecked(position, true);
 				// update a text view of the current player on screen
 				mDrawerLayout.closeDrawers();
@@ -237,6 +246,7 @@ public class GameBoard extends Activity{
 			// Get game from database
 			current_game = 
 				DBFunct.startGame(new TPlayer(player_ids[player], players[player]));
+			
 		}
 		else{
 			// Start local game
