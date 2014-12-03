@@ -3,6 +3,8 @@ package com.ToeTactics.tictactictactoe.database;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.parse.Parse;
@@ -232,7 +234,7 @@ public class DBFunct {
 	// Sends a push notification for the new current player
 	// refreshes board query and notifies of update
 	//-----------------------------------------------------
-	public static boolean sendGameboardPush(TGame game){
+	public static boolean sendGameboardPush(TGame game, String cords){
 		ParsePush push = new ParsePush();
 		
 		// Query User table for current_player user which should now be opponent
@@ -245,7 +247,13 @@ public class DBFunct {
 		
 		
 		push.setQuery(pushQuery);
-		push.setMessage(ParseUser.getCurrentUser().getUsername() + " made a move!");
+		try {
+			push.setData(new JSONObject("[\"data\":\"board|" + game.player1.facebook_id + "|" + 
+							game.player2.facebook_id + "|" + cords + "\"]"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		push.sendInBackground();
 		
 		return false;

@@ -1,6 +1,7 @@
 package com.ToeTactics.tictactictactoe;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
@@ -172,7 +173,8 @@ public class GameBoardFragment extends Fragment {
 				if(gbActivity.current_game.obj_id != GameBoard.LOCAL_GAME){
 					DBFunct.updateGame(gbActivity.current_game);
 					// Send push notification
-					DBFunct.sendGameboardPush(gbActivity.current_game);
+					DBFunct.sendGameboardPush(gbActivity.current_game, 
+					"" + i + "," + j + "," + k + "," + l);
 				}
 			}
 		}

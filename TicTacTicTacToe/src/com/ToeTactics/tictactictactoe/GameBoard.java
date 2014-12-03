@@ -36,6 +36,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class GameBoard extends Activity{
+	// Push Notification JSON Key
+	public static final String PUSH_KEY = "com.parse.Data";
 	// JSON keys
 	public static final String BOARDKEY = "BoardKey";
 	
@@ -102,8 +104,20 @@ public class GameBoard extends Activity{
 		pushReceiver = new ParsePushBroadcastReceiver(){
 			@Override
 			public void onReceive(Context c, Intent i){
-				// Get data from Push message
-				String[] data = "board|p1|p2|0,0,0,0".split("|");
+				// JSON Fetch and conversion
+				Bundle bundle = i.getExtras();
+				String jData = bundle.getString(PUSH_KEY);
+				JSONObject jObject;
+				
+				try {
+					jObject = new JSONObject(jData);
+					jData = jObject.getString("data");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+				// Get data from Push message jData conversion
+				String[] data = jData.split("|");
 				
 				if(data[0].equals("board")){
 					// Get player ids from push message
