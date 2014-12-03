@@ -9,16 +9,17 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
-import com.ToeTactics.tictactictactoe.database.ToePushReceiver;
 import com.parse.ParseInstallation;
-import com.parse.ParsePush;
+import com.parse.ParsePushBroadcastReceiver;
 import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -68,6 +69,9 @@ public class GameBoard extends Activity{
 	// current game object
 	public TGame current_game;
 	
+	// receiver
+	private ParsePushBroadcastReceiver pushReceiver;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,21 +92,69 @@ public class GameBoard extends Activity{
 		if(savedInstanceState != null){
 		//	SwitchPlayerBoard(NOGAME);
 		}
-		//Log.i(TAG, "Passing onCreate");
 		
 		// Associate current user with installation (device)
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 		installation.put("user", ParseUser.getCurrentUser());
 		installation.saveInBackground();
 		
-		// Adding IntentFilter
+		// Define receiver
+		pushReceiver = new ParsePushBroadcastReceiver(){
+			@Override
+			public void onReceive(Context c, Intent i){
+				// Get data from Push message
+				String[] data = "board|p1|p2|0,0,0,0".split("|");
+				
+				if(data[0].equals("board")){
+					// Get player ids from push message
+					String p1_fb_id = data[1];
+					String p2_fb_id = data[2];
+					// Get move coordinates from message
+					String[] move = data[3].split(",");
+				
+					if(current_game.player1.facebook_id.equals(p1_fb_id) 
+						&& current_game.player2.facebook_id.equals(p2_fb_id)){
+						// Update the board
+						Fragment boardFrag = getFragmentManager()
+								.findFragmentById(R.id.game_display);
+						
+						if(boardFrag instanceof GameBoardFragment){
+							((GameBoardFragment) boardFrag)
+								.receiveMove(Integer.parseInt(move[0]), 
+										Integer.parseInt(move[1]), 
+										Integer.parseInt(move[2]), 
+										Integer.parseInt(move[3]));
+						}
+					}
+				}
+				if(data[0].equals("message")){
+					// Get message
+					String msg = data[1];
+					// Update log in ChatFragment
+					
+				}
+			}
+		};
+		
+		// Set up intent filter
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("com.parse.push.intent.RECEIVE");
+		filter.addAction("com.parse.push.intent.DELETE");
+		filter.addAction("com.parse.push.intent.OPEN");
+		
+		// Register
+		registerReceiver(pushReceiver,filter);
 	}
 	
 	
 	// On Destroy
 	@Override
 	public void onDestroy(){
+		
 		super.onDestroy();
+		// Unregister push receiver
+		unregisterReceiver(pushReceiver);
+		// Sign user out
 		DBFunct.signOut();
 	}
 	

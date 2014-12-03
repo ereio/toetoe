@@ -115,7 +115,7 @@ public class GameBoardFragment extends Fragment {
 	//----------------------------------------------------------------------
 	// Make a move at the provided coordinates
 	//----------------------------------------------------------------------
-	private boolean move(int i, int j, int k, int l){
+	protected boolean move(int i, int j, int k, int l){
 		if(board.makeMove(i, j, k, l)){
 			// Note: current_player is now the next player
 
@@ -176,6 +176,15 @@ public class GameBoardFragment extends Fragment {
 				}
 			}
 		}
+	}
+	
+	protected void receiveMove(int i, int j, int k, int l){
+		// Make move
+		move(i,j,k,l);
+		
+		// Update current game
+		gbActivity.current_game.board = getBoardAsJSON();
+		gbActivity.current_game.SwapPlayers();
 	}
 	
 	@Override
