@@ -10,16 +10,13 @@ import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
 import com.parse.ParseInstallation;
-import com.parse.ParsePushBroadcastReceiver;
 import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;

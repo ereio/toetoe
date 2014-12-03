@@ -61,7 +61,8 @@
 				<category android:name="com.ToeTactics.tictactictactoe" />
 			</intent-filter>
 		</receiver>
-		<receiver android:name="com.ToeTactics.tictactictactoe.database.ToePushReceiver">
+		<receiver android:name="com.ToeTactics.tictactictactoe.database.ToePushReceiver"
+		    android:exported="false">
 		    <intent-filter>
 		    	<action android:name="com.parse.push.intent.RECEIVE"/>
 		    	<action android:name="com.parse.push.intent.DELETE"/>

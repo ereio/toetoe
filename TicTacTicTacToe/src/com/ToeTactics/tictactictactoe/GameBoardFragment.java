@@ -1,13 +1,14 @@
 package com.ToeTactics.tictactictactoe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class GameBoardFragment extends Fragment {
 	public ImageView[][] sub_winners = new ImageView[3][3];
 
 	// Game board
-	public Board board = new Board();
+	public Board board = new Board(); 
 
 	//-----------------------------------------------------------------------------------
 	// onCreateView
@@ -38,6 +39,25 @@ public class GameBoardFragment extends Fragment {
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
+	//-------------------------------------------------
+	// Builds alert for when the game i over
+	//-------------------------------------------------
+	public AlertDialog buildEndGameAlert(String winner){
+		AlertDialog.Builder ad_builder = new AlertDialog.Builder(getActivity());
+		ad_builder.setMessage("Play again?")
+				  .setTitle(winner+" wins!")
+				  .setPositiveButton("Sure, why not", new DialogInterface.OnClickListener() {
+			
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Update board
+						emptyBoard();
+					}
+				});
+	
+		return ad_builder.create();
+	}
+
 	//--------------------------------------------------------------
 	// Get current board as a JSONArray
 	//--------------------------------------------------------------
@@ -103,13 +123,65 @@ public class GameBoardFragment extends Fragment {
 			
 			// Check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
-				// TODO game end alert dialog
+				// Show who won and ask to tart a new game
+				buildEndGameAlert(""+board.getWinner()).show();
 			}
 		} catch(Exception e){
 			Log.e(TAG, e.toString());
 			// Let the user know something went wrong
 			Toast.makeText(getActivity(), "An error occured while creating the game board...", 
 					Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	//--------------------------------------------------------
+	// Clear everything being used to maintain the game board
+	//--------------------------------------------------------
+	public void emptyBoard(){
+		try{
+			// Reset board
+			Log.i(TAG,"Resetting board");
+			board = new Board();
+			
+			// Update game
+			Log.i(TAG,"Resetting game");
+			gbActivity.current_game.board = new JSONArray(DBFunct.EMPTY_JSON_BOARD);
+			
+			// Update db if not local game
+			Log.i(TAG,"Resetting db");
+			if(!gbActivity.current_game.obj_id.equals(GameBoard.LOCAL_GAME)){
+				DBFunct.updateGame(gbActivity.current_game);
+			}
+			
+			// Update UI
+			Log.i(TAG,"Resetting UI");
+			for(int i =0; i < 3; i++){
+				for(int j =0; j < 3; j++){
+					for(int k =0; k < 3; k++){
+						for(int l =0; l < 3; l++){
+							//if not already blank{
+								spaces[i][j][k][l].setImageDrawable(getResources()
+										.getDrawable(R.drawable.blank_tile));
+							//}
+						}
+					}
+				}
+			}
+			// Reset winner tiles
+			for(int i = 0; i < 3; i++){
+				for(int j = 0; j < 3; j++){
+					if(sub_winners[i][j].getVisibility() == View.VISIBLE){
+						sub_winners[i][j].setVisibility(View.GONE);
+						for(int k = 0; k < 3; k++){
+							for(int l = 0; l < 3; l++){
+								spaces[i][j][k][l].setVisibility(View.VISIBLE);
+							}
+						}
+					}
+				}
+			}
+		} catch(Exception e){
+			Log.e(TAG,e.toString());
 		}
 	}
 	
@@ -154,7 +226,8 @@ public class GameBoardFragment extends Fragment {
 			
 			//check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
-				// TODO alert dialog
+				// Show who won and ask to tart a new game
+				buildEndGameAlert(""+board.getWinner()).show();
 			}
 			return true;
 		}
