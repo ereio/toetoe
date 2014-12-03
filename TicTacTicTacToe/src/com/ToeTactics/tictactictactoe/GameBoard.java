@@ -41,6 +41,9 @@ public class GameBoard extends Activity{
 	// JSON keys
 	public static final String BOARDKEY = "BoardKey";
 	
+	// Static self ref
+	public static GameBoard thisActivity = null;
+	
 	// no game error identifier
 	public static final String NOGAME = "NoGame";
 	
@@ -72,7 +75,7 @@ public class GameBoard extends Activity{
 	public TGame current_game;
 	
 	// receiver
-	private ParsePushBroadcastReceiver pushReceiver;
+	//private ParsePushBroadcastReceiver pushReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,53 +103,14 @@ public class GameBoard extends Activity{
 		installation.put("user", ParseUser.getCurrentUser());
 		installation.saveInBackground();
 		
+		// Set self ref for push receiver
+		thisActivity = this;
+		
 		// Define receiver
-		pushReceiver = new ParsePushBroadcastReceiver(){
+/*		pushReceiver = new ParsePushBroadcastReceiver(){
 			@Override
 			public void onReceive(Context c, Intent i){
-				// JSON Fetch and conversion
-				Bundle bundle = i.getExtras();
-				String jData = bundle.getString(PUSH_KEY);
-				JSONObject jObject;
-				
-				try {
-					jObject = new JSONObject(jData);
-					jData = jObject.getString("data");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				
-				// Get data from Push message jData conversion
-				String[] data = jData.split("|");
-				
-				if(data[0].equals("board")){
-					// Get player ids from push message
-					String p1_fb_id = data[1];
-					String p2_fb_id = data[2];
-					// Get move coordinates from message
-					String[] move = data[3].split(",");
-				
-					if(current_game.player1.facebook_id.equals(p1_fb_id) 
-						&& current_game.player2.facebook_id.equals(p2_fb_id)){
-						// Update the board
-						Fragment boardFrag = getFragmentManager()
-								.findFragmentById(R.id.game_display);
-						
-						if(boardFrag instanceof GameBoardFragment){
-							((GameBoardFragment) boardFrag)
-								.receiveMove(Integer.parseInt(move[0]), 
-										Integer.parseInt(move[1]), 
-										Integer.parseInt(move[2]), 
-										Integer.parseInt(move[3]));
-						}
-					}
-				}
-				if(data[0].equals("message")){
-					// Get message
-					String msg = data[1];
-					// Update log in ChatFragment
-					
-				}
+				receivePushMsg(i);
 			}
 		};
 		
@@ -158,16 +122,70 @@ public class GameBoard extends Activity{
 		
 		// Register
 		registerReceiver(pushReceiver,filter);
+*/
 	}
 	
+	//----------------------------
+	// Process message from push 
+	//----------------------------
+	public void receivePushMsg(Intent i){
+		// JSON Fetch and conversion
+		Bundle bundle = i.getExtras();
+		String jData = bundle.getString(PUSH_KEY);
+		JSONObject jObject;
+		try {
+			jObject = new JSONObject(jData);
+			jData = jObject.getString("data");
+		} catch (JSONException e) {
+			Log.e(TAG,e.toString());
+			return;
+		}
+		
+		// Get data from Push message jData conversion
+		String[] data = jData.split("|");
+		
+		if(data[0].equals("board")){
+			// Get player ids from push message
+			String p1_fb_id = data[1];
+			String p2_fb_id = data[2];
+			// Get move coordinates from message
+			String[] move = data[3].split(",");
+		
+			if(current_game.player1.facebook_id.equals(p1_fb_id) 
+				&& current_game.player2.facebook_id.equals(p2_fb_id)){
+				// Update the board
+				Fragment boardFrag = getFragmentManager()
+						.findFragmentById(R.id.game_display);
+				
+				if(boardFrag instanceof GameBoardFragment){
+					((GameBoardFragment) boardFrag)
+						.receiveMove(Integer.parseInt(move[0]), 
+								Integer.parseInt(move[1]), 
+								Integer.parseInt(move[2]), 
+								Integer.parseInt(move[3]));
+				}
+			}
+		}
+		if(data[0].equals("message")){
+			// Get message
+			String msg = data[1];
+			// Update log in ChatFragment
+			
+		}
+	}
 	
 	// On Destroy
 	@Override
 	public void onDestroy(){
 		
 		super.onDestroy();
+		
+		// Unset self ref
+		thisActivity = null;
+		
 		// Unregister push receiver
-		unregisterReceiver(pushReceiver);
+		//unregisterReceiver(pushReceiver);
+		
 		// Sign user out
 		DBFunct.signOut();
 	}
