@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.ToeTactics.tictactictactoe.database.TGame;
 import com.ToeTactics.tictactictactoe.database.TPlayer;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
@@ -98,7 +99,11 @@ public class GameBoard extends Activity{
 		// Associate current user with installation (device)
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 		installation.put("user", ParseUser.getCurrentUser());
-		installation.saveInBackground();
+		try {
+			installation.save();
+		} catch (ParseException e) {
+			Log.e(TAG,e.toString());
+		}
 		
 		// Set self ref for push receiver
 		thisActivity = this;
@@ -139,7 +144,7 @@ public class GameBoard extends Activity{
 		}
 		
 		// Get data from Push message jData conversion
-		String[] data = jData.split(" ");
+		String[] data = jData.split("\t");
 		
 		if(data[0].equals("board")){
 			// Data format: board id1 id2 x,x,x,x

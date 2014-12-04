@@ -249,8 +249,8 @@ public class DBFunct {
 		
 		push.setQuery(pushQuery);
 		try {
-			push.setData(new JSONObject("{\"data\":\"board " + game.player1.facebook_id + " " + 
-							game.player2.facebook_id + " " + cords + "\"}"));
+			push.setData(new JSONObject("{\"data\":\"board\t" + game.player1.facebook_id + "\t" + 
+							game.player2.facebook_id + "\t" + cords + "\"}"));
 		} catch (Exception e) {
 			Log.e(TAG,e.toString());
 			return false;
@@ -286,7 +286,7 @@ public class DBFunct {
 		
 		push.setQuery(pushQuery);
 		try {
-			push.setData(new JSONObject("{\"data\":\"message " + msg + "\"}"));
+			push.setData(new JSONObject("{\"data\":\"message\t" + msg + "\"}"));
 		} catch (Exception e) {
 			Log.e(TAG,e.toString());
 			return false;
