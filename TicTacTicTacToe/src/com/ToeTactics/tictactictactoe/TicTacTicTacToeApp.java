@@ -5,7 +5,7 @@ import com.ToeTactics.tictactictactoe.database.DBFunct;
 import android.app.Application;
 import android.widget.Toast;
 
-public class TicTacTicTacToe extends Application{
+public class TicTacTicTacToeApp extends Application{
 	@Override
 	public void onCreate(){
 		super.onCreate();

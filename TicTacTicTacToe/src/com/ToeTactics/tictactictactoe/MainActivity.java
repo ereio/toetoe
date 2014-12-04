@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					Toast.LENGTH_SHORT).show();
 			finish();
 		}
-		 */
+		*/
 		
 		// fb setup
 		APP_ID = getString(R.string.app_id);
