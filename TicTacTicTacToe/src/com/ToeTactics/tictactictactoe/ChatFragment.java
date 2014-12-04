@@ -72,11 +72,24 @@ public class ChatFragment extends Fragment{
 				//String m = message.getText().toString();
 				//((GameBoard)getActivity()).sendMessage(m);
 				
+				// Get name and message
+				String m = DBFunct.getUser().name + ": " + message.getText().toString();
+				
 				// Send message if not local game
 				if(gbActivity.current_game != null && 
 						!gbActivity.current_game.obj_id.equals(GameBoard.LOCAL_GAME)){
-					DBFunct.sendMessagePush(gbActivity.current_game, 
-							DBFunct.getUser().name + ": " + message.getText().toString());
+					// Set game chat log and update in db
+					if(gbActivity.current_game.chat_log == null){
+						gbActivity.current_game.chat_log = new JSONArray();
+					}
+					gbActivity.current_game.chat_log.put(m);
+					DBFunct.updateGame(gbActivity.current_game);
+					
+					// Send push with the message
+					DBFunct.sendMessagePush(gbActivity.current_game, m);
+					
+					// Update the UI
+					setMessage(m);
 				}
 				else{
 					// Update chat log; don't send push or save in db
@@ -96,8 +109,13 @@ public class ChatFragment extends Fragment{
 	// Initialize the chat log for the current game
 	//----------------------------------------------
 	public void initLog(){
-		// Get chat log from game/db
-		JSONArray log = new JSONArray();
+		// Get chat log from game
+		if(gbActivity.current_game.chat_log == null){
+			gbActivity.current_game.chat_log = new JSONArray();
+		}
+		JSONArray log = gbActivity.current_game.chat_log;
+		
+		// Update the UI
 		try{
 			for(int i = 0; i < log.length(); i++){
 				setMessage(log.getString(i));

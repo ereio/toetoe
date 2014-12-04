@@ -8,6 +8,7 @@ public class TGame {
 	public TPlayer player2;
 	public String current_player_id;
 	public JSONArray board;
+	public JSONArray chat_log;
 	
 	public TGame(String objectId){
 		obj_id = objectId;

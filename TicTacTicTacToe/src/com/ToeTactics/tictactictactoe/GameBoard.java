@@ -354,11 +354,15 @@ public class GameBoard extends Activity{
 		}
 		
 		Fragment fNewBoard = new GameBoardFragment();
+		Fragment fNewChat = new ChatFragment();
 
-		// Replace GameBoardFragment instance
+		// Replace fragments
 		FragmentManager fManager = getFragmentManager();
 		FragmentTransaction fTrans = fManager.beginTransaction();
+		// Replace GameBoardFragment instance
 		fTrans.replace(R.id.game_display, fNewBoard);
+		// Replace ChatFragment Instance
+		fTrans.replace(R.id.right_chat, fNewChat);
 		fTrans.commit();
 	}
 	

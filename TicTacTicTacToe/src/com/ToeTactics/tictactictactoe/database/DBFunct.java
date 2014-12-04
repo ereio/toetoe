@@ -70,6 +70,7 @@ public class DBFunct {
 				// Initialize a new game
 				TGame game = new TGame("");
 				game.board = new JSONArray(EMPTY_JSON_BOARD);
+				game.chat_log = new JSONArray();
 				game.current_player_id = getUser().facebook_id;
 				game.player1 = new TPlayer(getUser().facebook_id,
 											getUser().name);
@@ -156,6 +157,7 @@ public class DBFunct {
 		if(p_game != null){
 			p_game.put("board", game.board);
 			p_game.put("current_player", game.current_player_id);
+			p_game.put("chat_log", game.chat_log);
 			
 			try {
 				p_game.save();
@@ -317,6 +319,7 @@ public class DBFunct {
 
 			game_obj.current_player_id = p_obj.getString("current_player");
 			game_obj.board = p_obj.getJSONArray("board");
+			game_obj.chat_log = p_obj.getJSONArray("chat_log");
 			
 			game_obj.obj_id = p_obj.getObjectId();
 		} catch(Exception e){
@@ -331,6 +334,7 @@ public class DBFunct {
 		ParseObject p_obj = new ParseObject("Game");
 		
 		p_obj.put("board", game.board);
+		p_obj.put("chat_log", game.chat_log);
 		p_obj.put("current_player", game.current_player_id);
 		p_obj.put("player1_fb_id", game.player1.facebook_id);
 		p_obj.put("player1_x_o", Character.toString(game.player1.x_or_o));
