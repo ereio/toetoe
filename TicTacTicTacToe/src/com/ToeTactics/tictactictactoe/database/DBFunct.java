@@ -248,8 +248,8 @@ public class DBFunct {
 		
 		push.setQuery(pushQuery);
 		try {
-			push.setData(new JSONObject("[\"data\":\"board|" + game.player1.facebook_id + "|" + 
-							game.player2.facebook_id + "|" + cords + "\"]"));
+			push.setData(new JSONObject("{\"data\":\"board|" + game.player1.facebook_id + "|" + 
+							game.player2.facebook_id + "|" + cords + "\"}"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
