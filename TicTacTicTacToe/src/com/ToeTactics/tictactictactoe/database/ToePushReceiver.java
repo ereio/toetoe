@@ -13,7 +13,7 @@ public class ToePushReceiver extends ParsePushBroadcastReceiver {
 	public void onReceive(Context context, Intent intent){
 		super.onReceive(context, intent);
 		
-		Toast.makeText(context.getApplicationContext(), "Push Notification Received", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(context.getApplicationContext(), "Push Notification Received", Toast.LENGTH_SHORT).show();
 		
 		// Call activity function
 		if(GameBoard.thisActivity != null){

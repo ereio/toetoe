@@ -68,12 +68,14 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		/*
 		if(!DBFunct.initDB(getApplicationContext())){
 			// Let the uer know something went wrong
 			Toast.makeText(this, "An error has occured while initializing the database connection...", 
 					Toast.LENGTH_SHORT).show();
 			finish();
 		}
+		 */
 		
 		// fb setup
 		APP_ID = getString(R.string.app_id);
