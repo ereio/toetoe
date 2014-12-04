@@ -3,7 +3,6 @@ package com.ToeTactics.tictactictactoe.database;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
@@ -258,6 +257,43 @@ public class DBFunct {
 		
 		return true;
 	}
+	
+	//----------------------------------------------------------
+	// Sends push notification with a message for the chat log
+	//----------------------------------------------------------
+	public static boolean sendMessagePush(TGame game, String msg){
+		ParsePush push = new ParsePush();
+		
+		// Determine the recipient of the message
+		String recipient_id;
+		if(game.player1.facebook_id.equals(getUser().facebook_id)){
+			recipient_id = game.player2.facebook_id;
+		}
+		else{
+			recipient_id = game.player1.facebook_id;
+		}
+		
+		// Query User table for current_player user which should now be opponent
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		userQuery.whereMatches("facebook_id", recipient_id);
+		
+		// Finds that users device handle for push notifications
+		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
+		pushQuery.whereMatchesQuery("user", userQuery);
+		
+		
+		push.setQuery(pushQuery);
+		try {
+			push.setData(new JSONObject("{\"data\":\"message " + msg + "\"}"));
+		} catch (Exception e) {
+			Log.e(TAG,e.toString());
+			return false;
+		}
+		push.sendInBackground();
+		
+		return true;
+	}
+	
 	//===============================================================
 	//
 	// conversion functions

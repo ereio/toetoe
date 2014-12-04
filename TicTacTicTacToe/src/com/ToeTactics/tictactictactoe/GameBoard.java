@@ -142,6 +142,8 @@ public class GameBoard extends Activity{
 		String[] data = jData.split(" ");
 		
 		if(data[0].equals("board")){
+			// Data format: board id1 id2 x,x,x,x
+			
 			// Get player ids from push message
 			String p1_fb_id = data[1];
 			String p2_fb_id = data[2];
@@ -164,10 +166,15 @@ public class GameBoard extends Activity{
 			}
 		}
 		if(data[0].equals("message")){
-			// Get message
-			String msg = data[1];
-			// Update log in ChatFragment
+			// Data format: message "the message"
 			
+			// Update chat log
+			Fragment chatFrag = getFragmentManager()
+					.findFragmentById(R.id.right_chat);
+			
+			if(chatFrag instanceof ChatFragment){
+				((ChatFragment) chatFrag).setMessage(data[1]);
+			}
 		}
 	}
 	
@@ -232,6 +239,8 @@ public class GameBoard extends Activity{
 			startActivity(settings);
 			return true;
 		} else*/ if (id == R.id.action_logout) {
+			// Unset auto sign in flag
+			
 			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
 			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(logout);
