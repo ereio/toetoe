@@ -139,7 +139,7 @@ public class GameBoard extends Activity{
 		}
 		
 		// Get data from Push message jData conversion
-		String[] data = jData.split("|");
+		String[] data = jData.split(" ");
 		
 		if(data[0].equals("board")){
 			// Get player ids from push message
@@ -332,16 +332,7 @@ public class GameBoard extends Activity{
 	// Change Opponent
 	//-------------------------------------------------------------------------
 	private void SwitchPlayerBoard(int player){
-		//Log.i(TAG,"Player "+player+" selected");
-		
-		Fragment fNewBoard = new GameBoardFragment();
-
-		// Replace GameBoardFragment instance
-		FragmentManager fManager = getFragmentManager();
-		FragmentTransaction fTrans = fManager.beginTransaction();
-		fTrans.replace(R.id.game_display, fNewBoard);
-		fTrans.commit();
-		
+		// Set game info
 		if(players[player] != NOGAME && players[player] != LOCAL_GAME){
 			// Get game from database
 			current_game = 
@@ -352,6 +343,14 @@ public class GameBoard extends Activity{
 			// Start local game
 			InitGame();
 		}
+		
+		Fragment fNewBoard = new GameBoardFragment();
+
+		// Replace GameBoardFragment instance
+		FragmentManager fManager = getFragmentManager();
+		FragmentTransaction fTrans = fManager.beginTransaction();
+		fTrans.replace(R.id.game_display, fNewBoard);
+		fTrans.commit();
 	}
 	
 	//--------------------------------------------------

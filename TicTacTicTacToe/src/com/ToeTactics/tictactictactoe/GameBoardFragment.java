@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameBoardFragment extends Fragment {
@@ -28,6 +29,9 @@ public class GameBoardFragment extends Fragment {
 	// Board of ImageViews
 	public ImageView[][][][] spaces = new ImageView[3][3][3][3];
 	public ImageView[][] sub_winners = new ImageView[3][3];
+	
+	// Tells the user it's their turn
+	public TextView turn_tv;
 
 	// Game board
 	public Board board = new Board(); 
@@ -126,6 +130,10 @@ public class GameBoardFragment extends Fragment {
 				// Show who won and ask to tart a new game
 				buildEndGameAlert(""+board.getWinner()).show();
 			}
+			
+			// Update turn text view
+			updateTurnTv();
+
 		} catch(Exception e){
 			Log.e(TAG, e.toString());
 			// Let the user know something went wrong
@@ -180,6 +188,10 @@ public class GameBoardFragment extends Fragment {
 					}
 				}
 			}
+			
+			// Update turn text view
+			updateTurnTv();
+			
 		} catch(Exception e){
 			Log.e(TAG,e.toString());
 		}
@@ -249,6 +261,9 @@ public class GameBoardFragment extends Fragment {
 					DBFunct.sendGameboardPush(gbActivity.current_game, 
 					"" + i + "," + j + "," + k + "," + l);
 				}
+				
+				// Update turn text view
+				updateTurnTv();
 			}
 		}
 	}
@@ -260,6 +275,21 @@ public class GameBoardFragment extends Fragment {
 		// Update current game
 		gbActivity.current_game.board = getBoardAsJSON();
 		gbActivity.current_game.SwapPlayers();
+		
+		// Update turn text view
+		updateTurnTv();
+	}
+	
+	//-----------------------------------------------------------
+	// Updates text view to notify user if it is their turn
+	//-----------------------------------------------------------
+	protected void updateTurnTv(){
+		if(gbActivity.current_game.current_player_id.equals(DBFunct.getUser().facebook_id)){
+			turn_tv.setVisibility(View.VISIBLE);
+		}
+		else{
+			turn_tv.setVisibility(View.INVISIBLE);
+		}
 	}
 	
 	@Override
@@ -396,6 +426,9 @@ public class GameBoardFragment extends Fragment {
 		spaces[2][2][2][0] = (ImageView) getActivity().findViewById(R.id.space86);
 		spaces[2][2][2][1] = (ImageView) getActivity().findViewById(R.id.space87);
 		spaces[2][2][2][2] = (ImageView) getActivity().findViewById(R.id.space88);
+		
+		turn_tv = (TextView) getActivity().findViewById(R.id.tv_your_turn);
+		turn_tv.setVisibility(View.INVISIBLE);
 		
 		//----------------------------------------------------------
 		// Set onClick listeners
@@ -806,7 +839,6 @@ public class GameBoardFragment extends Fragment {
 			}
 		});
 		if(gbActivity.current_game != null){
-			Log.i(TAG, "initializing board");
 			initBoard(gbActivity.current_game.board);
 		}
 		else{
