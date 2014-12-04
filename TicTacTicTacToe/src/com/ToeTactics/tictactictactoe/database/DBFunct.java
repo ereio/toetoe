@@ -250,13 +250,13 @@ public class DBFunct {
 		try {
 			push.setData(new JSONObject("{\"data\":\"board " + game.player1.facebook_id + " " + 
 							game.player2.facebook_id + " " + cords + "\"}"));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG,e.toString());
+			return false;
 		}
 		push.sendInBackground();
 		
-		return false;
+		return true;
 	}
 	//===============================================================
 	//

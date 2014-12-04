@@ -226,12 +226,12 @@ public class GameBoard extends Activity{
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		
-		if (id == R.id.action_settings) {
+		/*if (id == R.id.action_settings) {
 			Intent settings = new Intent(getApplicationContext(), Settings.class);
 			settings.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 			startActivity(settings);
 			return true;
-		} else if (id == R.id.action_logout) {
+		} else*/ if (id == R.id.action_logout) {
 			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
 			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(logout);
