@@ -268,11 +268,14 @@ public class DBFunct {
 		
 		// Determine the recipient of the message
 		String recipient_id;
+		String sender;
 		if(game.player1.facebook_id.equals(getUser().facebook_id)){
 			recipient_id = game.player2.facebook_id;
+			sender = game.player1.facebook_id;
 		}
 		else{
 			recipient_id = game.player1.facebook_id;
+			sender = game.player2.facebook_id;
 		}
 		
 		// Query User table for current_player user which should now be opponent
@@ -286,7 +289,9 @@ public class DBFunct {
 		
 		push.setQuery(pushQuery);
 		try {
-			push.setData(new JSONObject("{\"data\":\"message\t" + msg + "\"}"));
+			push.setData(new JSONObject("{\"data\":\"message" +
+					"\t" + sender + 
+					"\t" + msg + "\"}"));
 		} catch (Exception e) {
 			Log.e(TAG,e.toString());
 			return false;

@@ -171,14 +171,18 @@ public class GameBoard extends Activity{
 			}
 		}
 		if(data[0].equals("message")){
-			// Data format: message "the message"
+			// Data format: message sender_id "the message"
 			
-			// Update chat log
-			Fragment chatFrag = getFragmentManager()
-					.findFragmentById(R.id.right_chat);
+			// Check if message is for current game
+			if(current_game.player1.facebook_id.equals(data[1]) 
+					|| current_game.player2.facebook_id.equals(data[1])){
+				// Update chat log
+				Fragment chatFrag = getFragmentManager()
+						.findFragmentById(R.id.right_chat);
 			
-			if(chatFrag instanceof ChatFragment){
-				((ChatFragment) chatFrag).setMessage(data[1]);
+				if(chatFrag instanceof ChatFragment){
+					((ChatFragment) chatFrag).setMessage(data[2]);
+				}
 			}
 		}
 	}
@@ -211,6 +215,23 @@ public class GameBoard extends Activity{
 		super.onPause();
 	}
 	
+	@Override
+	public void onStart(){
+		super.onStart();
+		
+		// Create new fragments to replace old ones
+		Fragment fNewBoard = new GameBoardFragment();
+		Fragment fNewChat = new ChatFragment();
+		
+		// Replace fragments
+		FragmentManager fManager = getFragmentManager();
+		FragmentTransaction fTrans = fManager.beginTransaction();
+		// Replace GameBoardFragment instance
+		fTrans.replace(R.id.game_display, fNewBoard);
+		// Replace ChatFragment Instance
+		fTrans.replace(R.id.right_chat, fNewChat);
+		fTrans.commit();
+	}
 	
 
 	//----------------------------------------------------------------------------
@@ -316,6 +337,7 @@ public class GameBoard extends Activity{
 			InitGame();
 		}
 		
+		// Create new fragments to replace old ones
 		Fragment fNewBoard = new GameBoardFragment();
 		Fragment fNewChat = new ChatFragment();
 
