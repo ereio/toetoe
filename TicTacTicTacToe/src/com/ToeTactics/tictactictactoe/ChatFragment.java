@@ -4,7 +4,7 @@ import org.json.JSONArray;
 
 import com.ToeTactics.tictactictactoe.database.DBFunct;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -138,10 +138,8 @@ public class ChatFragment extends Fragment{
 		TextView t = new TextView(getActivity());
 		message.trim();
 		
-		if(!message.isEmpty()){
-			t.setText(message);
-			layout.addView(t);
-		}
+		t.setText(message);
+		layout.addView(t);
 		
 	}
 }

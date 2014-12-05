@@ -14,14 +14,15 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,7 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class GameBoard extends Activity{
+public class GameBoard extends ActionBarActivity{
 	// Push Notification JSON Key
 	public static final String PUSH_KEY = "com.parse.Data";
 	// JSON keys
@@ -158,7 +159,7 @@ public class GameBoard extends Activity{
 			if(current_game.player1.facebook_id.equals(p1_fb_id) 
 				&& current_game.player2.facebook_id.equals(p2_fb_id)){
 				// Update the board
-				Fragment boardFrag = getFragmentManager()
+				Fragment boardFrag = getSupportFragmentManager()
 						.findFragmentById(R.id.game_display);
 				
 				if(boardFrag instanceof GameBoardFragment){
@@ -177,7 +178,7 @@ public class GameBoard extends Activity{
 			if(current_game.player1.facebook_id.equals(data[1]) 
 					|| current_game.player2.facebook_id.equals(data[1])){
 				// Update chat log
-				Fragment chatFrag = getFragmentManager()
+				Fragment chatFrag = getSupportFragmentManager()
 						.findFragmentById(R.id.right_chat);
 			
 				if(chatFrag instanceof ChatFragment){
@@ -224,7 +225,7 @@ public class GameBoard extends Activity{
 		Fragment fNewChat = new ChatFragment();
 		
 		// Replace fragments
-		FragmentManager fManager = getFragmentManager();
+		FragmentManager fManager = getSupportFragmentManager();
 		FragmentTransaction fTrans = fManager.beginTransaction();
 		// Replace GameBoardFragment instance
 		fTrans.replace(R.id.game_display, fNewBoard);
@@ -342,7 +343,7 @@ public class GameBoard extends Activity{
 		Fragment fNewChat = new ChatFragment();
 
 		// Replace fragments
-		FragmentManager fManager = getFragmentManager();
+		FragmentManager fManager = getSupportFragmentManager();
 		FragmentTransaction fTrans = fManager.beginTransaction();
 		// Replace GameBoardFragment instance
 		fTrans.replace(R.id.game_display, fNewBoard);
@@ -378,8 +379,8 @@ public class GameBoard extends Activity{
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		//Sets ActionBar App Icon to essentially clear opened drawers
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
 		
 		// Creates player list array // WHERE PLAYERS ARE SET
 		playerList.setAdapter(new ArrayAdapter<String>(this, R.layout.player_entry, players));
@@ -393,7 +394,7 @@ public class GameBoard extends Activity{
 	private void frag_init(){
 		fBoard = new GameBoardFragment();
 		fChat = new ChatFragment();
-		FragmentManager fManager = getFragmentManager();
+		FragmentManager fManager = getSupportFragmentManager();
 		FragmentTransaction fTrans = fManager.beginTransaction();
 		fTrans.add(R.id.game_display, fBoard);
 		fTrans.add(R.id.right_chat, fChat);
@@ -509,6 +510,8 @@ public class GameBoard extends Activity{
 			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
 			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(logout);
+			finish();
+			
 			return true;
 			
 		} else if(id == R.id.action_chat){
@@ -538,21 +541,21 @@ public class GameBoard extends Activity{
 			boolean isPlayerOpened = mDrawerLayout.isDrawerOpen(playerList);
 			boolean isChatOpened = mDrawerLayout.isDrawerOpen(mChat);
 			if(isChatOpened){
-				getActionBar().setTitle(username + " " + getString(R.string.ChatPrompt));
+				getSupportActionBar().setTitle(username + " " + getString(R.string.ChatPrompt));
 				mDrawerLayout.closeDrawer(playerList);
 			}
 			if(isPlayerOpened){
-				getActionBar().setTitle(getString(R.string.PlayersPrompt));
+				getSupportActionBar().setTitle(getString(R.string.PlayersPrompt));
 				mDrawerLayout.closeDrawer(mChat);
 			}
-			invalidateOptionsMenu();
+			supportInvalidateOptionsMenu();
 			mDrawerToggle.syncState();
 		}
 		
 		@Override
 		public void onDrawerClosed(View drawerView){
-			getActionBar().setTitle(getString(R.string.app_name));
-			invalidateOptionsMenu();
+			getSupportActionBar().setTitle(getString(R.string.app_name));
+			supportInvalidateOptionsMenu();
 			mDrawerToggle.syncState();
 		}
 	}
