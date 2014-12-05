@@ -4,991 +4,992 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:columnCount="5" >
-<!--  had to set gravity within the board fragement to change elsewhere-->
+
+    <!-- had to set gravity within the board fragement to change elsewhere -->
+
     <GridLayout
         android:layout_column="0"
         android:layout_gravity="start"
         android:layout_row="0"
         android:columnCount="5" >
-        
-    <ImageView
-        android:id="@+id/winner00"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-        
-    <ImageView
-        android:id="@+id/space00"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space10"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner00"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space20"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space01"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space00"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space11"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space10"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space21"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space02"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space20"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space12"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space01"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space22"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space11"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space21"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space02"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space12"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space22"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="2"
         android:layout_gravity="start"
         android:layout_row="0" >
-    
-    <ImageView
-        android:id="@+id/winner10"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-        
-    <ImageView
-        android:id="@+id/space30"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space31"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner10"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space32"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space40"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space30"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space41"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space31"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space42"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space50"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space32"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space51"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space40"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space52"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space41"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space42"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space50"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space51"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space52"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="4"
         android:layout_gravity="start"
         android:layout_row="0" >
-    
-    <ImageView
-        android:id="@+id/winner20"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space60"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space61"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner20"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space62"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space70"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space60"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space71"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space61"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space72"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space80"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space62"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space81"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space70"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space82"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space71"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space72"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space80"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space81"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space82"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="0"
         android:layout_gravity="start"
         android:layout_row="2" >
-    
-    <ImageView
-        android:id="@+id/winner01"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space03"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space04"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner01"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space05"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space13"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space03"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space14"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space04"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space15"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space23"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space05"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space24"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space13"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space25"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space14"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space15"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space23"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space25"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="2"
         android:layout_gravity="start"
         android:layout_row="2" >
-    
-    <ImageView
-        android:id="@+id/winner11"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space33"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space34"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner11"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space35"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space43"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space33"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space44"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space34"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space45"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space53"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space35"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space54"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space43"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space55"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space44"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space45"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space53"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space54"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space55"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="4"
         android:layout_gravity="start"
         android:layout_row="2" >
-    
-    <ImageView
-        android:id="@+id/winner21"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space63"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space64"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner21"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space65"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space73"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space63"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space74"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space64"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space75"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space83"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space65"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space84"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space73"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space85"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space74"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space75"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space83"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space84"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space85"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="0"
         android:layout_gravity="start"
         android:layout_row="4" >
-    
-    <ImageView
-        android:id="@+id/winner02"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space06"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space07"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner02"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space08"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space16"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space06"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space17"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space07"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space18"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space26"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space08"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space27"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space16"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space28"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space17"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space18"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space26"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space27"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space28"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="2"
         android:layout_gravity="start"
         android:layout_row="4" >
-    
-    <ImageView
-        android:id="@+id/winner12"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
-    
-    <ImageView
-        android:id="@+id/space36"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space37"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner12"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space38"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space46"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space36"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space47"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space37"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space48"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space56"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space38"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space57"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space46"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space58"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space47"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space48"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space56"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space57"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space58"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <GridLayout
         android:layout_column="4"
         android:layout_gravity="start"
         android:layout_row="4" >
-    
-    <ImageView
-        android:id="@+id/winner22"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile"
-        android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space66"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/winner22"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/space67"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space66"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space68"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="0"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space76"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space67"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space77"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="2"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space68"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="0"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space78"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="2"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-    
-    <ImageView
-        android:id="@+id/space86"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="0"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space76"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space87"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="2"
-        android:layout_gravity="start"
-        android:layout_row="4"
-        android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
+        <ImageView
+            android:id="@+id/space77"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
 
-    <ImageView
-        android:id="@+id/space88"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_column="4"
-        android:layout_gravity="start"
-        android:layout_row="4"
-		android:contentDescription="@string/space_desc"
-        android:src="@drawable/blank_tile" />
-        
+        <ImageView
+            android:id="@+id/space78"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="2"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space86"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space87"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="2"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
+
+        <ImageView
+            android:id="@+id/space88"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_column="4"
+            android:layout_gravity="start"
+            android:layout_row="4"
+            android:contentDescription="@string/space_desc"
+            android:src="@drawable/blank_tile" />
     </GridLayout>
 
     <View
+        android:layout_width="3dp"
+        android:layout_height="3dp"
         android:layout_column="1"
-        android:layout_row="1"
-        android:layout_width="3dp"
-        android:layout_height="3dp"
-        ></View>
+        android:layout_row="1" >
+    </View>
+
     <View
-        android:layout_column="3"
-        android:layout_row="3"
         android:layout_width="3dp"
         android:layout_height="3dp"
-        ></View>
-    
+        android:layout_column="3"
+        android:layout_row="3" >
+    </View>
+
+    <TextView
+        android:id="@+id/tv_your_turn"
+        android:layout_column="2"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_row="5"
+        android:text="@string/turn_text" />
+
 </GridLayout>

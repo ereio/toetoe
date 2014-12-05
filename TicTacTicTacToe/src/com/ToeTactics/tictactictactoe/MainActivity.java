@@ -9,16 +9,14 @@ import java.security.NoSuchAlgorithmException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
+import com.ToeTactics.tictactictactoe.database.DBFunct;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
-import com.facebook.model.GraphUser;
+import com.parse.ParseInstallation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,26 +33,34 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends Activity implements OnClickListener {
+	//log tag
+	public final static String TAG = "MainActivity";
+	
+	//bundle keys
 	public final static String USER = "UserKey";
 	public final static String FRIENDS = "FriendListKey";
 	public final static String USERIDKEY = "UserIdKey";
 	
+	//fb vars
 	String APP_ID;
 	Facebook fb;
 	Button fbButton;
 	AsyncFacebookRunner mAsyncRunner;
 	
+	//login UI
 	Button bLogin;
+	Button bChangePassword;
 	EditText eUsername;
-	EditText ePassword;
-	String usr; // stores facebook name 
+	EditText ePassword; 
 	
+	//user data
 	String nameEntry;
 	String passEntry;
+	String emailEntry;
 	String friendsList;
 	String userIDEntry;
 	
@@ -62,7 +68,16 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		/*
+		if(!DBFunct.initDB(getApplicationContext())){
+			// Let the uer know something went wrong
+			Toast.makeText(this, "An error has occured while initializing the database connection...", 
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		*/
 		
+		// fb setup
 		APP_ID = getString(R.string.app_id);
 		fb = new Facebook(APP_ID);
 		mAsyncRunner = new AsyncFacebookRunner(fb);
@@ -77,21 +92,19 @@ public class MainActivity extends Activity implements OnClickListener {
 	            Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 	            }
 	    } catch (NameNotFoundException e) {
-
+	    	Log.e(TAG,e.toString());
 	    } catch (NoSuchAlgorithmException e) {
-
+	    	Log.e(TAG,e.toString());
 	    }
 
 		fbButton = (Button)findViewById(R.id.authButton);
 		fbButton.setOnClickListener(this);
+		// end fb setup
 		
 		ui_init();
 		
 	}
 
-
-	// User Interface Initalization
-	//--------------------------------------------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -104,19 +117,28 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		
+		//int id = item.getItemId();
+		
 		return super.onOptionsItemSelected(item);
 	}
 	
-	
+	//--------------------------------------------------
+	// User Interface Initalization
+	//--------------------------------------------------
 	private void ui_init(){
 		bLogin = (Button) findViewById(R.id.LoginButton);
+		bChangePassword = (Button) findViewById(R.id.ChangePassButton);
 		eUsername = (EditText) findViewById(R.id.UsernameEntry);
 		ePassword = (EditText) findViewById(R.id.PasswordEntry);
 		
+		//Saved for planned login option
+		bLogin.setVisibility(View.GONE);
+		bChangePassword.setVisibility(View.GONE);
+		ePassword.setVisibility(View.GONE);
+		eUsername.setVisibility(View.GONE);
+		
+		/*
 		nameEntry = new String();
 		passEntry = new String();
 		
@@ -130,79 +152,95 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 			}
 		});
+		*/
 	}
-	
+	/*
 	private boolean Auth(){
 		return true;
 	}
+	*/
 	
-	
+	//--------------------------------------------------
+	// Start GameBoard Activity
+	//--------------------------------------------------
 	private void StartGame(){
 		Bundle extras = new Bundle();
+		boolean name_set = false;
+		boolean friends_set = false;
+		boolean id_set = false;
 		if(nameEntry != null && !nameEntry.equals("")){
 			extras.putString(USER, nameEntry);
+			name_set = true;
 		}
 		if(friendsList != null && !friendsList.equals("")){
 			extras.putString(FRIENDS, friendsList);
+			friends_set = true;
 		}
 		if(userIDEntry != null && !userIDEntry.equals("")){
 			extras.putString(USERIDKEY, userIDEntry);
+			id_set = true;
 		}
-		//extras.putString("access_token", access_token);
-		Intent success = new Intent(getApplicationContext(), GameBoard.class);
-		success.putExtras(extras);
-		startActivity(success);
+		
+		if(name_set && friends_set && id_set){
+			Intent success = new Intent(getApplicationContext(), GameBoard.class);
+			success.putExtras(extras);
+			startActivity(success);
+		}
+		else{
+			// Let the uer know something went wrong
+			Toast.makeText(this, "An error has occured while logging in...", 
+					Toast.LENGTH_SHORT).show();
+		}
+		
+		finish();
 	}
 
-	@SuppressWarnings("deprecation")
+	//-----------------------------------------------
+	// Facebook Button onClick
+	//-----------------------------------------------
 	@Override
 	public void onClick(View v) {
 		if (fb.isSessionValid())
 		{
 			try {
 				fb.logout(getApplicationContext());
-				
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				Log.e(TAG,e.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG,e.toString());
 			}			
 		}
 		else // login
 		{
-			fb.authorize(this, new String[] {"user_friends", "public_profile"}, new DialogListener() {
+			fb.authorize(this, new String[] {"user_friends", "public_profile", "email"}, new DialogListener() {
 
 				@Override
 				public void onFacebookError(FacebookError e) {
 					 Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
-					 Log.e("MainActivity", e.toString());
+					 Log.e(TAG,e.toString());
 				}
 				
 				@Override
 				public void onError(DialogError e) {
 					 Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
-					 Log.e("MainActivity", e.toString());
+					 Log.e(TAG,e.toString());
 				}
 				
 				@Override
 				public void onComplete(Bundle values) {
-					Toast.makeText(MainActivity.this, "Authorization successful", Toast.LENGTH_SHORT).show();
-					
 					getFacebookName();
-					//getFacebookFriends();
-					//StartGame();
-
 				}
 				
 				@Override
 				public void onCancel() {
-					
-					 //Toast.makeText(MainActivity.this, "Authorization failed", Toast.LENGTH_SHORT).show();
 				}
 			});
 		}	
 	}
 	
+	//-----------------------------------------------------------------------------
+	// Facebook Login Callback
+	//-----------------------------------------------------------------------------
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -210,7 +248,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		fb.authorizeCallback(requestCode, resultCode, data);
 	}
 	
-	@SuppressWarnings("deprecation")
+	//----------------------------
+	// Get FB Name From API
+	//----------------------------
 	public void getFacebookName(){
 		
 		mAsyncRunner.request("me", new RequestListener(){
@@ -222,43 +262,52 @@ public class MainActivity extends Activity implements OnClickListener {
 				try {
 					JSONObject JSONresponse = new JSONObject(response);
 					nameEntry = JSONresponse.getString("name");
-					//Log.i("MainActivity", nameEntry);
 					userIDEntry = JSONresponse.getString("id");
+					//temporarily using id a password
+					passEntry = JSONresponse.getString("id");
+					emailEntry = JSONresponse.getString("email");
 					
 					getFacebookFriends();
 					
 				} catch (JSONException e) {
-					Log.e("MainActivity",e.toString());
+					Log.e(TAG,e.toString());
+					// TODO failed login alert
 				}
 			}
 
 			@Override
 			public void onIOException(IOException e, Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onFileNotFoundException(FileNotFoundException e,
 					Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onMalformedURLException(MalformedURLException e,
 					Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onFacebookError(FacebookError e, Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 			
 		});
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+	//-----------------------------------------------------------
+	// Get Friends List as JON Array from API
+	//-----------------------------------------------------------
 	public void getFacebookFriends(){
 		mAsyncRunner.request("me/friends", new RequestListener(){
 
@@ -268,34 +317,50 @@ public class MainActivity extends Activity implements OnClickListener {
 				try{
 					JSONObject JSONresponse = new JSONObject(response);
 					friendsList = JSONresponse.getJSONArray("data").toString();
-					Log.i("MainActivity",friendsList);
-					StartGame();
-					
+					//Log.i("MainActivity",friendsList);
+					if(!DBFunct.createUser(userIDEntry, nameEntry, passEntry, emailEntry)){
+						if(!DBFunct.signIn(nameEntry, passEntry)){
+							// TODO failed login alert
+						}
+						else{
+							StartGame();
+						}
+					}
+					else{
+						if(DBFunct.getUser() != null){
+							StartGame();
+						}
+					}
 				} catch(Exception e){
-					Log.e("MainActivity",e.toString());
+					Log.e(TAG,e.toString());
+					// TODO failed login alert
 				}
 			}
 
 			@Override
 			public void onIOException(IOException e, Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onFileNotFoundException(FileNotFoundException e,
 					Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onMalformedURLException(MalformedURLException e,
 					Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 
 			@Override
 			public void onFacebookError(FacebookError e, Object state) {
-				Log.e("MainActivity",e.toString());
+				Log.e(TAG,e.toString());
+				// TODO failed login alert
 			}
 			
 		});

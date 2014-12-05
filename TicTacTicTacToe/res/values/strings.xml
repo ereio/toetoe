@@ -26,4 +26,5 @@
 	    Secret Setting - WARNING:Pretty Difficult
 	</string>
 	<string name="app_id">1119137601559950</string>
+	<string name="turn_text">Your Turn</string>
 </resources>

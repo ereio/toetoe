@@ -1,13 +1,14 @@
 package com.ToeTactics.tictactictactoe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.ToeTactics.tictactictactoe.GameBoardLogic.Board;
-import com.ToeTactics.tictactictactoe.toeclient.ToeClient;
+import com.ToeTactics.tictactictactoe.database.DBFunct;
 
+
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,29 +16,56 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameBoardFragment extends Fragment {
+	// Log tag
+	public static final String TAG = "GameBoardFragment";
+	
+	// GameBoard activity handle
+	public static GameBoard gbActivity;
 
+	// Board of ImageViews
 	public ImageView[][][][] spaces = new ImageView[3][3][3][3];
 	public ImageView[][] sub_winners = new ImageView[3][3];
 	
-	public Board board = new Board();
-	//public char x_or_o;
-	//public String username;
-	private String lastMoveUserID = "-1";
-	
+	// Tells the user it's their turn
+	public TextView turn_tv;
+
+	// Game board
+	public Board board = new Board(); 
+
+	//-----------------------------------------------------------------------------------
+	// onCreateView
+	//-----------------------------------------------------------------------------------
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state){
-		if(state != null){
-			//Bundle bundle = getArguments();
-			//String currentMoves = bundle.getString(GameBoard.BOARDKEY);
-			//initBoard(currentMoves);
-		}
-		
 		return inflater.inflate(R.layout.game_board, container, false);
 	}
 	
-	public JSONObject getBoardAsJSON(){
-		JSONObject game = new JSONObject();
+	//-------------------------------------------------
+	// Builds alert for when the game i over
+	//-------------------------------------------------
+	public AlertDialog buildEndGameAlert(String winner){
+		AlertDialog.Builder ad_builder = new AlertDialog.Builder(getActivity());
+		ad_builder.setMessage("Play again?")
+				  .setTitle(winner+" wins!")
+				  .setPositiveButton("Sure, why not", new DialogInterface.OnClickListener() {
+			
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Update board
+						emptyBoard();
+					}
+				});
+	
+		return ad_builder.create();
+	}
+
+	//--------------------------------------------------------------
+	// Get current board as a JSONArray
+	//--------------------------------------------------------------
+	public JSONArray getBoardAsJSON(){
 		JSONArray JSONboard = new JSONArray();
 		
 		try{
@@ -48,7 +76,8 @@ public class GameBoardFragment extends Fragment {
 					for(int k = 0; k < 3; k++){
 						JSONArray inner_row = new JSONArray();
 						for(int l = 0; l < 3; l++){
-							inner_row.put(l, "" + board.outer_board[i][j].getSpace(k, l));
+							inner_row.put(l, "" + board.outer_board[i][j]
+										  				.getSpace(k, l));
 						}
 						inner_col.put(k, inner_row);
 					}
@@ -56,118 +85,144 @@ public class GameBoardFragment extends Fragment {
 				}
 				JSONboard.put(i, outer_row);
 			}
-			
-			game.put("board", JSONboard);
-			game.put("cur_player", "" + board.current_player);
 		} catch(Exception e){
 			Log.e("GameBoardFragment", e.toString());
+			Toast.makeText(getActivity(), "An error has occured...", Toast.LENGTH_SHORT).show();
 		}
 		
-		return game;
+		return JSONboard;
 	}
-	/*
-	public void init(String user_name, String board_JSON){
-		username = user_name;
-		
-		if(!board_JSON.equals("")){
-			try {
-				JSONObject game_obj = new JSONObject(board_JSON);
-				if(game_obj.getJSONObject("current-player").getString("username").equals(username)){
-					x_or_o = game_obj.getJSONObject("current-player").getString("value").charAt(0);
-				}
-				else{
-					x_or_o = game_obj.getJSONObject("next-player").getString("value").charAt(0);
-				}
-				
-				initBoard(board_JSON);
-				
-			} catch (JSONException e) {
-				Log.e("GameBoardFragment",e.toString());
-			}
-		}
-	}
-	*/
-	public void initBoard(String JSON_board){
-		if(!JSON_board.equals("")){
-			try {
-				// must incapculate with {} with string conversions
-				JSONObject game_obj = new JSONObject(JSON_board);
-				
-				for(int i = 0; i < 3; i++){
-					for(int j = 0; j < 3; j++){
-						for(int k = 0; k < 3; k++){
-							for(int l = 0; l < 3; l++){
-								if(game_obj.getJSONArray("board")
-										.getJSONArray(i)
-										.getJSONArray(j)
-										.getJSONArray(k)
-										.getString(l)
-										.charAt(0) != Board.BLANK_TILE)
-								{
-									board.current_player =
-										game_obj.getJSONArray("board")
-												.getJSONArray(i)
-												.getJSONArray(j)
-												.getJSONArray(k)
-												.getString(l)
-												.charAt(0);
-									move(i,j,k,l);
+
+	//---------------------------------------------------------
+	// Initialize board with JSONArray
+	//---------------------------------------------------------
+	public void initBoard(JSONArray JSON_board){
+		try{
+			for(int i = 0; i < 3; i++){
+				for(int j = 0; j < 3; j++){
+					for(int k = 0; k < 3; k++){
+						for(int l = 0; l < 3; l++){
+							if(JSON_board
+								.getJSONArray(i)
+								.getJSONArray(j)
+								.getJSONArray(k)
+								.getString(l)
+								.charAt(0) != Board.BLANK_TILE)
+							{
+								board.current_player =
+								JSON_board
+									.getJSONArray(i)
+									.getJSONArray(j)
+									.getJSONArray(k)
+									.getString(l)
+									.charAt(0);
+								if(move(i,j,k,l)){
+									// Move successful
 								}
 							}
 						}
 					}
 				}
-				
-				board.current_player = game_obj.getString("cur_player").charAt(0);
-				
-				lastMoveUserID = game_obj.getString("last_move_user_id");
-				
-				//check for winner
-				if(board.getWinner() != Board.BLANK_TILE){
-					// TODO alert dialog
-				}
-			} catch (JSONException e) {
-				Log.e("GameBoardFragment",e.toString());
 			}
+			
+			// Check for winner
+			if(board.getWinner() != Board.BLANK_TILE){
+				// Show who won and ask to tart a new game
+				buildEndGameAlert(""+board.getWinner()).show();
+			}
+			
+			// Update turn text view
+			updateTurnTv();
+
+		} catch(Exception e){
+			Log.e(TAG, e.toString());
+			// Let the user know something went wrong
+			Toast.makeText(getActivity(), "An error occured while creating the game board...", 
+					Toast.LENGTH_LONG).show();
 		}
 	}
 	
-	private boolean move(int i, int j, int k, int l){
-		if(board.makeMove(i, j, k, l)){
-			//mark last player since that's who made the move
-			if(board.current_player == Board.O_TILE){
-				spaces[i][j][k][l].setImageResource(R.drawable.x_tile_w_bg);
-				/*
-				JSONObject JSONgameObj = getBoardAsJSON();
-				try{
-					JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-				} catch(Exception e){
-					Log.e("GameBoardFrag",e.toString());
-				}
-				((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
-				*/
-			}
-			if(board.current_player == Board.X_TILE){
-				spaces[i][j][k][l].setImageResource(R.drawable.o_tile_w_bg);
-				/*
-				JSONObject JSONgameObj = getBoardAsJSON();
-				try{
-					JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-				} catch(Exception e){
-					Log.e("GameBoardFrag",e.toString());
-				}
-				((GameBoard)getActivity()).sendBoard(getBoardAsJSON().toString());
-				*/
+	//--------------------------------------------------------
+	// Clear everything being used to maintain the game board
+	//--------------------------------------------------------
+	public void emptyBoard(){
+		try{
+			// Reset board
+			Log.i(TAG,"Resetting board");
+			board = new Board();
+			
+			// Update game
+			Log.i(TAG,"Resetting game");
+			gbActivity.current_game.board = new JSONArray(DBFunct.EMPTY_JSON_BOARD);
+			
+			// Update db if not local game
+			Log.i(TAG,"Resetting db");
+			if(!gbActivity.current_game.obj_id.equals(GameBoard.LOCAL_GAME)){
+				DBFunct.updateGame(gbActivity.current_game);
 			}
 			
-			//check for subgame winner
+			// Update UI
+			Log.i(TAG,"Resetting UI");
+			for(int i =0; i < 3; i++){
+				for(int j =0; j < 3; j++){
+					for(int k =0; k < 3; k++){
+						for(int l =0; l < 3; l++){
+							//if not already blank{
+								spaces[i][j][k][l].setImageDrawable(getResources()
+										.getDrawable(R.drawable.blank_tile));
+							//}
+						}
+					}
+				}
+			}
+			// Reset winner tiles
+			for(int i = 0; i < 3; i++){
+				for(int j = 0; j < 3; j++){
+					if(sub_winners[i][j].getVisibility() == View.VISIBLE){
+						sub_winners[i][j].setVisibility(View.GONE);
+						for(int k = 0; k < 3; k++){
+							for(int l = 0; l < 3; l++){
+								spaces[i][j][k][l].setVisibility(View.VISIBLE);
+							}
+						}
+					}
+				}
+			}
+			
+			// Update turn text view
+			updateTurnTv();
+			
+		} catch(Exception e){
+			Log.e(TAG,e.toString());
+		}
+	}
+	
+	//----------------------------------------------------------------------
+	// Make a move at the provided coordinates
+	//----------------------------------------------------------------------
+	protected boolean move(int i, int j, int k, int l){
+		if(board.makeMove(i, j, k, l)){
+			// Note: current_player is now the next player
+
+			// Update board UI
+			if(board.current_player == Board.O_TILE){
+				spaces[i][j][k][l].setImageDrawable(getResources()
+						.getDrawable(R.drawable.x_tile_w_bg));
+			}
+			if(board.current_player == Board.X_TILE){
+				spaces[i][j][k][l].setImageDrawable(getResources()
+						.getDrawable(R.drawable.o_tile_w_bg));
+			}
+			
+			// Check for subgame winners
 			if(board.outer_board[i][j].getWinner() == Board.X_TILE){
 				for(int c1 = 0; c1 < 3; c1++){
 					for(int c2 = 0; c2 < 3; c2++){
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
 					}
 				}
-				sub_winners[i][j].setImageResource(R.drawable.x_tile_w_bg);
+				sub_winners[i][j].setImageDrawable(getResources()
+						.getDrawable(R.drawable.x_tile_w_bg));
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
 			if(board.outer_board[i][j].getWinner() == Board.O_TILE){
@@ -176,23 +231,15 @@ public class GameBoardFragment extends Fragment {
 						spaces[i][j][c1][c2].setVisibility(View.GONE);
 					}
 				}
-				sub_winners[i][j].setImageResource(R.drawable.o_tile_w_bg);
+				sub_winners[i][j].setImageDrawable(getResources()
+						.getDrawable(R.drawable.o_tile_w_bg));
 				sub_winners[i][j].setVisibility(View.VISIBLE);
 			}
 			
-			//add last_player_move_id and send board
-			JSONObject JSONgameObj = getBoardAsJSON();
-			try{
-				JSONgameObj.put("last_move_user_id",((GameBoard) getActivity()).userID);
-			} catch(Exception e){
-				Log.e("GameBoardFrag",e.toString());
-			}
-			((GameBoard)getActivity()).sendBoard(JSONgameObj.toString());
-			//lastMoveUserID = ((GameBoard) getActivity()).userID;
-			
 			//check for winner
 			if(board.getWinner() != Board.BLANK_TILE){
-				// TODO alert dialog
+				// Show who won and ask to tart a new game
+				buildEndGameAlert(""+board.getWinner()).show();
 			}
 			return true;
 		}
@@ -200,17 +247,64 @@ public class GameBoardFragment extends Fragment {
 	}
 	
 	public void makeMove(int i, int j, int k, int l){
-		//player can't make 2 moves in a row
-		//if(!lastMoveUserID.equals(((GameBoard)getActivity()).userID)){
+		if(gbActivity.current_game.current_player_id 
+				.equals(DBFunct.getUser().facebook_id)){
 			if(move(i ,j ,k ,l)){
-				lastMoveUserID = ((GameBoard) getActivity()).userID;
+				// Update current game
+				gbActivity.current_game.board = getBoardAsJSON();
+				gbActivity.current_game.SwapPlayers();
+				
+				// Update database
+				if(gbActivity.current_game.obj_id != GameBoard.LOCAL_GAME){
+					DBFunct.updateGame(gbActivity.current_game);
+					// Send push notification
+					DBFunct.sendGameboardPush(gbActivity.current_game, 
+					"" + i + "," + j + "," + k + "," + l);
+				}
+				
+				// Update turn text view
+				updateTurnTv();
 			}
-		//}
+		}
+	}
+	
+	protected void receiveMove(int i, int j, int k, int l){
+		// Make move
+		move(i,j,k,l);
+		
+		// Update current game
+		gbActivity.current_game.board = getBoardAsJSON();
+		gbActivity.current_game.SwapPlayers();
+		
+		// Update turn text view
+		updateTurnTv();
+	}
+	
+	//-----------------------------------------------------------
+	// Updates text view to notify user if it is their turn
+	//-----------------------------------------------------------
+	protected void updateTurnTv(){
+		if(gbActivity.current_game.current_player_id.equals(DBFunct.getUser().facebook_id)){
+			turn_tv.setVisibility(View.VISIBLE);
+		}
+		else{
+			turn_tv.setVisibility(View.INVISIBLE);
+		}
 	}
 	
 	@Override
 	public void onStart(){
 		super.onStart();
+		
+		Log.i(TAG,"onStart");
+		
+		// Get handle on activity
+		gbActivity = (GameBoard) getActivity();
+		
+		//-------------------------------------------------------------------------
+		// Get handle on image views
+		//-------------------------------------------------------------------------
+		
 		//Board Coordinates Reference
 		//        0         1         2
 		//     0  1  2   0  1  2   0  1  2
@@ -333,8 +427,12 @@ public class GameBoardFragment extends Fragment {
 		spaces[2][2][2][1] = (ImageView) getActivity().findViewById(R.id.space87);
 		spaces[2][2][2][2] = (ImageView) getActivity().findViewById(R.id.space88);
 		
-		//Log.i("GameBoardFragment", "setting listeners");
-		//set on click listeners
+		turn_tv = (TextView) getActivity().findViewById(R.id.tv_your_turn);
+		turn_tv.setVisibility(View.INVISIBLE);
+		
+		//----------------------------------------------------------
+		// Set onClick listeners
+		//----------------------------------------------------------
 		spaces[0][0][0][0].setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				makeMove(0,0,0,0);
@@ -740,6 +838,13 @@ public class GameBoardFragment extends Fragment {
 				makeMove(2,2,2,2);
 			}
 		});
+		if(gbActivity.current_game != null){
+			initBoard(gbActivity.current_game.board);
+		}
+		else{
+			// Let the user know something went wrong
+			Toast.makeText(getActivity(), "An error has occured while creating the game...", 
+					Toast.LENGTH_SHORT).show();
+		}
 	}
-	
 }
