@@ -505,10 +505,14 @@ public class GameBoard extends Activity{
 		
 		if (id == R.id.action_logout) {
 			// Unset auto sign in flag
+			//sharedprefs code
 			
+			// Restart login activity
 			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
 			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(logout);
+			finish();
+			
 			return true;
 			
 		} else if(id == R.id.action_chat){
