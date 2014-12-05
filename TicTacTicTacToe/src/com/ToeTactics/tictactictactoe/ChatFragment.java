@@ -47,6 +47,7 @@ public class ChatFragment extends Fragment{
 	@Override
 	public void onStart(){
 		super.onStart();
+		
 		init();
 		
 	}
@@ -72,32 +73,34 @@ public class ChatFragment extends Fragment{
 				//String m = message.getText().toString();
 				//((GameBoard)getActivity()).sendMessage(m);
 				
-				// Get name and message
-				String m = DBFunct.getUser().name + ": " + message.getText().toString();
+				if(!message.getText().toString().equals("")){
+					// Get name and message
+					String m = DBFunct.getUser().name + ": " + message.getText().toString();
 				
-				// Send message if not local game
-				if(gbActivity.current_game != null && 
-						!gbActivity.current_game.obj_id.equals(GameBoard.LOCAL_GAME)){
-					// Set game chat log and update in db
-					if(gbActivity.current_game.chat_log == null){
-						gbActivity.current_game.chat_log = new JSONArray();
+					// Send message if not local game
+					if(gbActivity.current_game != null && 
+							!gbActivity.current_game.obj_id.equals(GameBoard.LOCAL_GAME)){
+						// Set game chat log and update in db
+						if(gbActivity.current_game.chat_log == null){
+							gbActivity.current_game.chat_log = new JSONArray();
+						}
+						gbActivity.current_game.chat_log.put(m);
+						DBFunct.updateGame(gbActivity.current_game);
+					
+						// Send push with the message
+						DBFunct.sendMessagePush(gbActivity.current_game, m);
+					
+						// Update the UI
+						setMessage(m);
 					}
-					gbActivity.current_game.chat_log.put(m);
-					DBFunct.updateGame(gbActivity.current_game);
-					
-					// Send push with the message
-					DBFunct.sendMessagePush(gbActivity.current_game, m);
-					
-					// Update the UI
-					setMessage(m);
-				}
-				else{
-					// Update chat log; don't send push or save in db
-					setMessage(message.getText().toString());
-				}
+					else{
+						// Update chat log; don't send push or save in db
+						setMessage(message.getText().toString());
+					}
 				
-				// Clear text view and close keyboard
-				message.setText("");
+					// Clear text view and close keyboard
+					message.setText("");
+				}
 			}
 		});
 		
