@@ -212,49 +212,7 @@ public class GameBoard extends Activity{
 	}
 	
 	
-	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu){
-		boolean isPlayerOpen = mDrawerLayout.isDrawerOpen(playerList);
-		boolean isChatOpen = mDrawerLayout.isDrawerOpen(mChat);
-		if(isPlayerOpen || isChatOpen){
-			menu.clear();
-		}
-		return super.onPrepareOptionsMenu(menu);
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		
-		/*if (id == R.id.action_settings) {
-			Intent settings = new Intent(getApplicationContext(), Settings.class);
-			settings.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-			startActivity(settings);
-			return true;
-		} else*/ if (id == R.id.action_logout) {
-			// Unset auto sign in flag
-			
-			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
-			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(logout);
-			return true;
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-	}
-	
 	//----------------------------------------------------------------------------
 	// Initialize user variables
 	//----------------------------------------------------------------------------
@@ -473,6 +431,77 @@ public class GameBoard extends Activity{
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+	
+	//----------------------------------------------------------
+	// Creates menu from layout
+	//----------------------------------------------------------
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	//----------------------------------------------------------
+	// Checks options and if something is open already
+	//----------------------------------------------------------
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu){
+		boolean isPlayerOpen = mDrawerLayout.isDrawerOpen(playerList);
+		boolean isChatOpen = mDrawerLayout.isDrawerOpen(mChat);
+		if(isPlayerOpen || isChatOpen){
+			menu.clear();
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	//----------------------------------------------------------
+	// On Options Selected for action bar
+	//----------------------------------------------------------
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		
+		
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+        	// Pass the event to ActionBarDrawerToggle, if it returns
+        	// true, then it has handled the app icon touch event
+			if (mDrawerToggle.onOptionsItemSelected(item)) {
+				return true;
+			}
+			
+			/*if (id == R.id.action_settings) {
+				Intent settings = new Intent(getApplicationContext(), Settings.class);
+				settings.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				startActivity(settings);
+				return true;
+			} else*/ 
+		
+		
+		if (id == R.id.action_logout) {
+			// Unset auto sign in flag
+			
+			Intent logout = new Intent(getApplicationContext(), MainActivity.class);
+			logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(logout);
+			return true;
+			
+		} else if(id == R.id.action_chat){
+			if (mDrawerLayout.isDrawerOpen(playerList)){
+		            mDrawerLayout.closeDrawer(playerList);
+		        }
+			mDrawerLayout.openDrawer(mChat);
+		    return true;
+		     
+		} else{
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	
 	
 	//--------------------------------------------------------------
 	// Class for creation of toggle for Drawer events
