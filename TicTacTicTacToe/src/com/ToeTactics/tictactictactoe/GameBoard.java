@@ -512,9 +512,6 @@ public class GameBoard extends Activity{
 			return true;
 			
 		} else if(id == R.id.action_chat){
-			if (mDrawerLayout.isDrawerOpen(playerList)){
-		            mDrawerLayout.closeDrawer(playerList);
-		        }
 			mDrawerLayout.openDrawer(mChat);
 		    return true;
 		     
@@ -542,9 +539,11 @@ public class GameBoard extends Activity{
 			boolean isChatOpened = mDrawerLayout.isDrawerOpen(mChat);
 			if(isChatOpened){
 				getActionBar().setTitle(username + " " + getString(R.string.ChatPrompt));
+				mDrawerLayout.closeDrawer(playerList);
 			}
 			if(isPlayerOpened){
 				getActionBar().setTitle(getString(R.string.PlayersPrompt));
+				mDrawerLayout.closeDrawer(mChat);
 			}
 			invalidateOptionsMenu();
 			mDrawerToggle.syncState();
